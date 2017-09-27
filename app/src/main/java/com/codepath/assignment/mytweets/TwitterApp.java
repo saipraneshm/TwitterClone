@@ -1,0 +1,41 @@
+package com.codepath.assignment.mytweets;
+
+import android.app.Application;
+import android.content.Context;
+
+import com.twitter.sdk.android.core.Twitter;
+
+import retrofit2.Retrofit;
+
+/*
+ * This is the Android application itself and is used to configure various settings
+ * including the image cache in memory and on disk. This also adds a singleton
+ * for accessing the relevant rest client.
+ *
+ *     TwitterClient client = TwitterApp.getRestClient();
+ *     // use client to send requests to API
+ *
+ */
+public class TwitterApp extends Application {
+	private static Context context;
+	private static Retrofit sRetrofit;
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		Twitter.initialize(this);
+
+		/*FlowManager.init(new FlowConfig.Builder(this).build());
+		FlowLog.setMinimumLoggingLevel(FlowLog.Level.V);*/
+		sRetrofit = new RetrofitClient().getRetrofit();
+		TwitterApp.context = this;
+	}
+
+	/*public static TwitterClient getRestClient() {
+		return (TwitterClient) TwitterClient.getInstance(TwitterClient.class, TwitterApp.context);
+	}*/
+
+	public static Retrofit getRetrofit(){
+		return sRetrofit;
+	}
+}
