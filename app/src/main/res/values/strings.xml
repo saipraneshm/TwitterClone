@@ -7,4 +7,6 @@
     <string name="username_placeholder">\@diamondCandlesasd</string>
     <string name="time_placeholder">16m</string>
     <string name="tweet_content">Fancy us to win the match? New customers can get 20/1 on us right here, did you get that?</string>
+    <string name="comments_tv">4</string>
+    <string name="repeat_count">25</string>
 </resources>
