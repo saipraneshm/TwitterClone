@@ -1,15 +1,18 @@
-package com.codepath.assignment.mytweets;
+package com.codepath.assignment.mytweets.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.codepath.assignment.mytweets.R;
+import com.codepath.assignment.mytweets.network.TwitterApiController;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mLoginButton = (TwitterLoginButton) findViewById(R.id.btnTwitterLogin);
+
 
         mLoginButton.setCallback(new Callback<TwitterSession>() {
             @Override
@@ -42,4 +46,6 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         mLoginButton.onActivityResult(requestCode,resultCode,data);
     }
+
+
 }

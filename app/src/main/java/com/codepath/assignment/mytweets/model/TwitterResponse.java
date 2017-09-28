@@ -1,4 +1,4 @@
-package com.codepath.assignment.mytweets;
+package com.codepath.assignment.mytweets.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

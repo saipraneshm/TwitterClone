@@ -1,13 +1,15 @@
-package com.codepath.assignment.mytweets;
+package com.codepath.assignment.mytweets.network;
 
 import android.util.Log;
+
+import com.codepath.assignment.mytweets.application.TwitterApp;
+import com.codepath.assignment.mytweets.model.TwitterResponse;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 /**
  * Created by saip92 on 9/27/2017.

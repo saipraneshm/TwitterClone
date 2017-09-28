@@ -3,9 +3,12 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 25
     buildToolsVersion "26.0.0"
+    dataBinding {
+        enabled = true
+    }
     defaultConfig {
         applicationId "com.codepath.assignment.mytweets"
-        minSdkVersion 16
+        minSdkVersion 18
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"

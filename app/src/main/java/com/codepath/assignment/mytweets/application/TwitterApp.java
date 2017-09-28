@@ -1,8 +1,9 @@
-package com.codepath.assignment.mytweets;
+package com.codepath.assignment.mytweets.application;
 
 import android.app.Application;
 import android.content.Context;
 
+import com.codepath.assignment.mytweets.network.RetrofitClient;
 import com.twitter.sdk.android.core.Twitter;
 
 import retrofit2.Retrofit;

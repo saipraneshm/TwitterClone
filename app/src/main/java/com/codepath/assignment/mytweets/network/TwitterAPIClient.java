@@ -1,5 +1,7 @@
-package com.codepath.assignment.mytweets;
+package com.codepath.assignment.mytweets.network;
 
+
+import com.codepath.assignment.mytweets.model.TwitterResponse;
 
 import java.util.List;
 
