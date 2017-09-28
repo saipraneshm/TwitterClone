@@ -5,9 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class TwitterResponse {
 
-/*        @SerializedName("coordinates")
-        @Expose
-        private Object coordinates;
         @SerializedName("truncated")
         @Expose
         private Boolean truncated;
@@ -31,7 +28,7 @@ public class TwitterResponse {
         private Object contributors;
         @SerializedName("id")
         @Expose
-        private Integer id;
+        private Long id;
         @SerializedName("retweet_count")
         @Expose
         private Integer retweetCount;
@@ -52,26 +49,30 @@ public class TwitterResponse {
         private Object place;
         @SerializedName("source")
         @Expose
-        private String source;*/
+        private String source;
         @SerializedName("user")
         @Expose
         private User user;
-/*        @SerializedName("in_reply_to_screen_name")
+       @SerializedName("in_reply_to_screen_name")
         @Expose
         private Object inReplyToScreenName;
         @SerializedName("in_reply_to_status_id")
         @Expose
-        private Object inReplyToStatusId;*/
+        private Object inReplyToStatusId;
 
-        /*public Object getCoordinates() {
-            return coordinates;
+        @SerializedName("entities")
+        @Expose
+        private Entities entities;
+
+        public Entities getEntities() {
+            return entities;
         }
 
-        public void setCoordinates(Object coordinates) {
-            this.coordinates = coordinates;
+        public void setEntities(Entities entities) {
+            this.entities = entities;
         }
 
-        public Boolean getTruncated() {
+    public Boolean getTruncated() {
             return truncated;
         }
 
@@ -111,8 +112,6 @@ public class TwitterResponse {
             this.inReplyToUserIdStr = inReplyToUserIdStr;
         }
 
-
-
         public String getText() {
             return text;
         }
@@ -129,11 +128,11 @@ public class TwitterResponse {
             this.contributors = contributors;
         }
 
-        public Integer getId() {
+        public Long getId() {
             return id;
         }
 
-        public void setId(Integer id) {
+        public void setId(Long id) {
             this.id = id;
         }
 
@@ -191,7 +190,7 @@ public class TwitterResponse {
 
         public void setSource(String source) {
             this.source = source;
-        }*/
+        }
 
         public User getUser() {
             return user;
@@ -201,7 +200,7 @@ public class TwitterResponse {
             this.user = user;
         }
 
-       /* public Object getInReplyToScreenName() {
+       public Object getInReplyToScreenName() {
             return inReplyToScreenName;
         }
 
@@ -216,7 +215,7 @@ public class TwitterResponse {
         public void setInReplyToStatusId(Object inReplyToStatusId) {
             this.inReplyToStatusId = inReplyToStatusId;
         }
-*/
+
 
     @Override
     public String toString() {

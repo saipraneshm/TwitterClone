@@ -58,7 +58,7 @@ public class User {
     private String profileImageUrlHttps;
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private Long id;
     @SerializedName("listed_count")
     @Expose
     private Integer listedCount;
@@ -257,11 +257,11 @@ public class User {
         this.profileImageUrlHttps = profileImageUrlHttps;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
