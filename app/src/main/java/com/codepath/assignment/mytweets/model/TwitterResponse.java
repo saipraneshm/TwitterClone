@@ -1,9 +1,16 @@
 package com.codepath.assignment.mytweets.model;
 
+import com.codepath.assignment.mytweets.data.local.TweetsDatabase;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.ForeignKey;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
 
-public class TwitterResponse {
+@Table(database = TweetsDatabase.class)
+public class TwitterResponse extends BaseModel {
 
         @SerializedName("truncated")
         @Expose
@@ -26,34 +33,48 @@ public class TwitterResponse {
         @SerializedName("contributors")
         @Expose
         private Object contributors;
+
+        @Column
+        @PrimaryKey
         @SerializedName("id")
         @Expose
         private Long id;
+
         @SerializedName("retweet_count")
         @Expose
         private Integer retweetCount;
+
         @SerializedName("in_reply_to_status_id_str")
         @Expose
         private Object inReplyToStatusIdStr;
+
         @SerializedName("geo")
         @Expose
         private Object geo;
+
         @SerializedName("retweeted")
         @Expose
         private Boolean retweeted;
+
         @SerializedName("in_reply_to_user_id")
         @Expose
         private Object inReplyToUserId;
+
         @SerializedName("place")
         @Expose
         private Object place;
+
         @SerializedName("source")
         @Expose
         private String source;
+
+        @Column
+        @ForeignKey(saveForeignKeyModel = true)
         @SerializedName("user")
         @Expose
         private User user;
-       @SerializedName("in_reply_to_screen_name")
+
+        @SerializedName("in_reply_to_screen_name")
         @Expose
         private Object inReplyToScreenName;
         @SerializedName("in_reply_to_status_id")
@@ -223,4 +244,6 @@ public class TwitterResponse {
                 "user=" + user.toString() +
                 '}';
     }
+
+
 }

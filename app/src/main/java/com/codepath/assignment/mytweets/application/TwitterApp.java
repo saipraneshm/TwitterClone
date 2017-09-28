@@ -4,6 +4,9 @@ import android.app.Application;
 import android.content.Context;
 
 import com.codepath.assignment.mytweets.network.RetrofitClient;
+import com.raizlabs.android.dbflow.config.FlowConfig;
+import com.raizlabs.android.dbflow.config.FlowLog;
+import com.raizlabs.android.dbflow.config.FlowManager;
 import com.twitter.sdk.android.core.Twitter;
 
 import retrofit2.Retrofit;
@@ -18,7 +21,6 @@ import retrofit2.Retrofit;
  *
  */
 public class TwitterApp extends Application {
-	private static Context context;
 	private static Retrofit sRetrofit;
 
 	@Override
@@ -26,15 +28,11 @@ public class TwitterApp extends Application {
 		super.onCreate();
 		Twitter.initialize(this);
 
-		/*FlowManager.init(new FlowConfig.Builder(this).build());
-		FlowLog.setMinimumLoggingLevel(FlowLog.Level.V);*/
+		FlowManager.init(new FlowConfig.Builder(this).build());
+		FlowLog.setMinimumLoggingLevel(FlowLog.Level.V);
 		sRetrofit = new RetrofitClient().getRetrofit();
-		TwitterApp.context = this;
 	}
 
-	/*public static TwitterClient getRestClient() {
-		return (TwitterClient) TwitterClient.getInstance(TwitterClient.class, TwitterApp.context);
-	}*/
 
 	public static Retrofit getRetrofit(){
 		return sRetrofit;

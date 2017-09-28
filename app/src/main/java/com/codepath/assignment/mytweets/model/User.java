@@ -1,9 +1,15 @@
 package com.codepath.assignment.mytweets.model;
 
+import com.codepath.assignment.mytweets.data.local.TweetsDatabase;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
 
-public class User {
+@Table(database = TweetsDatabase.class)
+public class User extends BaseModel {
 
     @SerializedName("name")
     @Expose
@@ -56,9 +62,13 @@ public class User {
     @SerializedName("profile_image_url_https")
     @Expose
     private String profileImageUrlHttps;
+
+    @PrimaryKey
+    @Column
     @SerializedName("id")
     @Expose
     private Long id;
+
     @SerializedName("listed_count")
     @Expose
     private Integer listedCount;

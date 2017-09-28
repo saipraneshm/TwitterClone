@@ -22,6 +22,8 @@ android {
     }
 }
 
+def dbflow_version = "4.0.3"
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -39,5 +41,8 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.0.0-RC1'
     compile 'oauth.signpost:signpost-core:1.2.1.2'
     compile 'com.twitter.sdk.android:tweet-ui:3.1.1'
+    annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
     testCompile 'junit:junit:4.12'
 }
