@@ -23,15 +23,22 @@ public class User extends BaseModel {
     @SerializedName("profile_sidebar_border_color")
     @Expose
     private String profileSidebarBorderColor;
+
+    @Column
     @SerializedName("profile_image_url")
     @Expose
     private String profileImageUrl;
+
+    @Column
     @SerializedName("created_at")
     @Expose
     private String createdAt;
+
+    @Column
     @SerializedName("location")
     @Expose
     private String location;
+
     @SerializedName("follow_request_sent")
     @Expose
     private Boolean followRequestSent;

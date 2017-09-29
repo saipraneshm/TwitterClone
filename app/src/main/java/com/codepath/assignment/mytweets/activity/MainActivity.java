@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         mLoginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
-                new TwitterApiController().getTwitterResponse();
+                startActivity(TwitterFeedActivity.getIntent(MainActivity.this));
             }
 
             @Override

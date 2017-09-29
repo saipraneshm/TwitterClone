@@ -21,6 +21,8 @@ public class TwitterResponse extends BaseModel {
         @SerializedName("favorited")
         @Expose
         private Boolean favorited;
+
+        @PrimaryKey
         @SerializedName("id_str")
         @Expose
         private String idStr;
