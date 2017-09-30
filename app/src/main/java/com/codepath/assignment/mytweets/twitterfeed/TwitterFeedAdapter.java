@@ -2,23 +2,22 @@ package com.codepath.assignment.mytweets.twitterfeed;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.graphics.Bitmap;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 
-import com.android.databinding.library.baseAdapters.BR;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.codepath.assignment.mytweets.R;
 import com.codepath.assignment.mytweets.databinding.TweetItemLayoutBinding;
-import com.codepath.assignment.mytweets.model.TwitterResponse;
+import com.codepath.assignment.mytweets.model.Tweet;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -27,11 +26,11 @@ import java.util.List;
 
 public class TwitterFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<TwitterResponse> mTweets;
+    private LinkedList<Tweet> mTweets;
 
     private Context mContext;
 
-    TwitterFeedAdapter(Context context, List<TwitterResponse> tweets) {
+    TwitterFeedAdapter(Context context, LinkedList<Tweet> tweets) {
         mTweets = tweets;
         mContext = context;
     }
@@ -55,18 +54,36 @@ public class TwitterFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return mTweets.size();
     }
 
-    public void appendTweets(List<TwitterResponse> tweets){
+    public void appendTweets(List<Tweet> tweets){
         int oldSize = mTweets.size();
         mTweets.addAll(tweets);
-        notifyItemRangeChanged(oldSize, mTweets.size() - oldSize);
+        notifyItemRangeChanged(oldSize, mTweets.size());
     }
 
-    public void addAllTweets(List<TwitterResponse> tweets){
+    public void addAllTweets(List<Tweet> tweets){
         if(tweets.size() > 0){
             mTweets.clear();
             mTweets.addAll(tweets);
             notifyDataSetChanged();
         }
+    }
+
+    public void clear(){
+        mTweets.clear();
+        notifyDataSetChanged();
+    }
+
+    public void addAllToFirst(List<Tweet> tweets){
+       for(int i = tweets.size() - 1; i >=0 ; i--){
+           addToFirst(tweets.get(i));
+       }
+      // notifyItemRangeInserted(0,tweets.size());
+        notifyDataSetChanged();
+    }
+
+    public void addToFirst(Tweet tweet){
+        mTweets.addFirst(tweet);
+        notifyItemInserted(0);
     }
 
 
@@ -79,9 +96,9 @@ public class TwitterFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             this.binding = binding;
         }
 
-        public void bind(TwitterResponse twitterResponse){
+        public void bind(Tweet tweet){
             Glide.with(mContext)
-                    .load(twitterResponse.getUser().getProfileImageUrl().replace("normal","bigger"))
+                    .load(tweet.getUser().getProfileImageUrl().replace("normal","bigger"))
                     .asBitmap()
                     .centerCrop()
                     .into(new BitmapImageViewTarget(binding.ivAvatar){
@@ -94,12 +111,14 @@ public class TwitterFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         }
                     });
 
-            binding.tvUserName.setText(String.format("@%s", twitterResponse.getUser().getScreenName()));
-            binding.tvName.setText(twitterResponse.getUser().getName());
-            binding.imgBtnLike.setText(String.valueOf(twitterResponse.getFavoriteCount()));
-            binding.imgBtnReTweet.setText(String.valueOf(twitterResponse.getRetweetCount()));
-         //   binding.imgBtnComments.setText(twitterResponse.getUser().getStatusesCount());
-            binding.tvTweetContent.setText(twitterResponse.getText());
+            binding.tvUserName.setText(String.format("@%s", tweet.getUser().getScreenName()));
+            binding.tvName.setText(tweet.getUser().getName());
+            binding.imgBtnLike.setText(String.valueOf(tweet.getFavoriteCount()));
+            binding.imgBtnReTweet.setText(String.valueOf(tweet.getRetweetCount()));
+            binding.tvTweetTime.setText(tweet.getRelativeTimeAgo());
+            //Log.d("REALTIVEDATE",tweet.getRelativeTimeAgo());
+         //   binding.imgBtnComments.setText(tweet.getUser().getStatusesCount());
+            binding.tvTweetContent.setText(tweet.getText());
             binding.executePendingBindings();
         }
     }

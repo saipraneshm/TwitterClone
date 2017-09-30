@@ -1,8 +1,9 @@
 package com.codepath.assignment.mytweets.data;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
-import com.codepath.assignment.mytweets.model.TwitterResponse;
+import com.codepath.assignment.mytweets.model.Tweet;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -17,12 +18,14 @@ public class TweetsRepository implements TweetsDataSource {
 
     private static TweetsRepository INSTANCE = null;
 
+    private static final String TAG = TweetsRepository.class.getSimpleName();
+
     private final TweetsDataSource mTweetsRemoteDataSource;
 
     private final TweetsDataSource mTweetsLocalDataSource;
 
 
-    Map<String, TwitterResponse> mCachedTweets;
+    Map<String, Tweet> mCachedTweets;
 
     boolean mCacheIsDirty = false;
 
@@ -44,7 +47,7 @@ public class TweetsRepository implements TweetsDataSource {
 
 
     @Override
-    public void getTweets(@NonNull final LoadTweetsCallback callback) {
+    public void getMoreTweets(@NonNull final LoadTweetsCallback callback) {
 
         if(mCachedTweets != null && !mCacheIsDirty){
             callback.onTweetsLoaded(new ArrayList<>(mCachedTweets.values()));
@@ -54,9 +57,9 @@ public class TweetsRepository implements TweetsDataSource {
         if(mCacheIsDirty){
             getTweetsFromRemoteDataSource(callback);
         }else{
-            mTweetsLocalDataSource.getTweets(new LoadTweetsCallback() {
+            mTweetsLocalDataSource.getMoreTweets(new LoadTweetsCallback() {
                 @Override
-                public void onTweetsLoaded(List<TwitterResponse> tweets) {
+                public void onTweetsLoaded(List<Tweet> tweets) {
                     refreshCache(tweets);
                     callback.onTweetsLoaded(new ArrayList<>(tweets));
                 }
@@ -69,38 +72,57 @@ public class TweetsRepository implements TweetsDataSource {
         }
     }
 
-    private void getTweetsFromRemoteDataSource(@NonNull final LoadTweetsCallback callback) {
-        mTweetsRemoteDataSource.getTweets(new LoadTweetsCallback() {
+    @Override
+    public void getMoreTweets(String maxId, String sinceId, @NonNull final LoadTweetsCallback callback) {
+        mTweetsRemoteDataSource.getMoreTweets(maxId, sinceId, new LoadTweetsCallback() {
             @Override
-            public void onTweetsLoaded(List<TwitterResponse> tweets) {
+            public void onTweetsLoaded(List<Tweet> tweets) {
+                Log.d(TAG, "Loading more tweets : " + tweets);
+                callback.onTweetsLoaded(new ArrayList<>(tweets));
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                Log.d(TAG,"Load more data failed");
+                callback.onDataNotAvailable();
+            }
+        });
+    }
+
+    private void getTweetsFromRemoteDataSource(@NonNull final LoadTweetsCallback callback) {
+        mTweetsRemoteDataSource.getMoreTweets(new LoadTweetsCallback() {
+            @Override
+            public void onTweetsLoaded(List<Tweet> tweets) {
+                Log.d(TAG,"Getting tweets from remote source : " + tweets);
                 refreshCache(tweets);
                 refreshLocalDatabase(tweets);
-                callback.onTweetsLoaded(new ArrayList<>(mCachedTweets.values()));
+                callback.onTweetsLoaded(new ArrayList<>(tweets));
             }
 
 
 
             @Override
             public void onDataNotAvailable() {
+                Log.d(TAG,"Loading data for first time failed");
                 callback.onDataNotAvailable();
             }
         });
     }
 
-    private void refreshLocalDatabase(List<TwitterResponse> tweets) {
+    private void refreshLocalDatabase(List<Tweet> tweets) {
         mTweetsLocalDataSource.deleteAllTweets();
-        for(TwitterResponse tweet: tweets){
+        for(Tweet tweet: tweets){
             mTweetsLocalDataSource.saveTweet(tweet);
         }
     }
 
-    private void refreshCache(List<TwitterResponse> tweets) {
+    private void refreshCache(List<Tweet> tweets) {
         if(mCachedTweets == null){
             mCachedTweets = new LinkedHashMap<>();
         }
 
         mCachedTweets.clear();
-        for(TwitterResponse tweet: tweets){
+        for(Tweet tweet: tweets){
             mCachedTweets.put(tweet.getIdStr(),tweet);
         }
 
@@ -125,13 +147,13 @@ public class TweetsRepository implements TweetsDataSource {
     }
 
     @Override
-    public void saveTweet(@NonNull TwitterResponse tweet) {
+    public void saveTweet(@NonNull Tweet tweet) {
 
     }
 
     @Override
-    public TwitterResponse postTweet(String tweetMessage) {
-       TwitterResponse tweet = mTweetsRemoteDataSource.postTweet(tweetMessage);
+    public Tweet postTweet(String tweetMessage) {
+       Tweet tweet = mTweetsRemoteDataSource.postTweet(tweetMessage);
         if(tweet == null) return null;
        mTweetsLocalDataSource.saveTweet(tweet);
 

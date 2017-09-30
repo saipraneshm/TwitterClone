@@ -1,5 +1,8 @@
 package com.codepath.assignment.mytweets.model;
 
+import android.text.format.DateUtils;
+import android.util.Log;
+
 import com.codepath.assignment.mytweets.data.local.TweetsDatabase;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,8 +12,12 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 @Table(database = TweetsDatabase.class)
-public class TwitterResponse extends BaseModel {
+public class Tweet extends BaseModel {
 
         @SerializedName("truncated")
         @Expose
@@ -252,10 +259,29 @@ public class TwitterResponse extends BaseModel {
             this.inReplyToStatusId = inReplyToStatusId;
         }
 
+        public String getRelativeTimeAgo(){
+            String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+            SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+            sf.setLenient(true);
+
+            String relativeDate = "";
+            try {
+                long dateMillis = sf.parse(createdAt).getTime();
+                relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+                        System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+                String[] time = relativeDate.split(" ");
+               // Log.d("REALTIVEDATE", time[0] + " " + time[1]);
+                return time[0] + time[1].charAt(0);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return relativeDate;
+        }
+
 
     @Override
     public String toString() {
-        return "TwitterResponse{" +
+        return "Tweet{" +
                 "user=" + user.toString() +
                 '}';
     }

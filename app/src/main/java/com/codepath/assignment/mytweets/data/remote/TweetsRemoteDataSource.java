@@ -1,15 +1,15 @@
 package com.codepath.assignment.mytweets.data.remote;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.codepath.assignment.mytweets.application.TwitterApp;
 import com.codepath.assignment.mytweets.data.TweetsDataSource;
-import com.codepath.assignment.mytweets.model.TwitterResponse;
+import com.codepath.assignment.mytweets.model.Tweet;
 import com.codepath.assignment.mytweets.network.TwitterAPIClient;
-import com.codepath.assignment.mytweets.network.TwitterApiController;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +30,9 @@ public class TweetsRemoteDataSource implements TweetsDataSource {
 
     private static TwitterAPIClient mTwitterClient;
 
-    private TwitterResponse postedTweet;
+    private Tweet postedTweet;
+
+    private static final String TAG = TweetsRemoteDataSource.class.getSimpleName();
 
 
     private TweetsRemoteDataSource(){
@@ -46,16 +48,16 @@ public class TweetsRemoteDataSource implements TweetsDataSource {
     }
 
     @Override
-    public void getTweets(@NonNull final LoadTweetsCallback callback) {
-        final Call<List<TwitterResponse>> response = mTwitterClient.getResponse();
-        response.enqueue(new Callback<List<TwitterResponse>>() {
+    public void getMoreTweets(@NonNull final LoadTweetsCallback callback) {
+        final Call<List<Tweet>> response = mTwitterClient.getResponse();
+        response.enqueue(new Callback<List<Tweet>>() {
             @Override
-            public void onResponse(Call<List<TwitterResponse>> call,
-                                   Response<List<TwitterResponse>> response) {
-                List<TwitterResponse> arrayList = response.body();
+            public void onResponse(Call<List<Tweet>> call,
+                                   Response<List<Tweet>> response) {
+                List<Tweet> arrayList = response.body();
                 if(arrayList != null && arrayList.size() > 0){
                     callback.onTweetsLoaded(arrayList);
-                    for(TwitterResponse res : arrayList){
+                    for(Tweet res : arrayList){
                         Log.d("RESPONSE",res.toString());
                     }
                 }
@@ -64,11 +66,46 @@ public class TweetsRemoteDataSource implements TweetsDataSource {
             }
 
             @Override
-            public void onFailure(Call<List<TwitterResponse>> call, Throwable t) {
+            public void onFailure(Call<List<Tweet>> call, Throwable t) {
                 Log.e("RESPONSE","Failure",t);
                 callback.onDataNotAvailable();
             }
         });
+    }
+
+    @Override
+    public void getMoreTweets(String maxId, String sinceId, @NonNull final LoadTweetsCallback callback) {
+        Map<String,String> queryParams = new HashMap<>();
+
+        if(maxId != null && !TextUtils.isEmpty(maxId)){
+            queryParams.put("max_id",maxId);
+        }
+
+        if(sinceId != null && !TextUtils.isEmpty(sinceId)){
+            queryParams.put("since_id",sinceId);
+        }
+
+        Log.d(TAG, queryParams + " values in hashMap" + maxId + " , " + sinceId);
+        final Call<List<Tweet>> response = mTwitterClient.getResponse(queryParams);
+        response.enqueue(new Callback<List<Tweet>>() {
+            @Override
+            public void onResponse(Call<List<Tweet>> call, Response<List<Tweet>> response) {
+                List<Tweet> arrayList = response.body();
+                if(arrayList != null && arrayList.size() > 0){
+                    callback.onTweetsLoaded(arrayList);
+                    /*for(Tweet res : arrayList){
+                        Log.d("RESPONSE",res.toString());
+                    }*/
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Tweet>> call, Throwable t) {
+                Log.e("RESPONSE","Failure",t);
+                callback.onDataNotAvailable();
+            }
+        });
+
     }
 
     @Override
@@ -82,22 +119,22 @@ public class TweetsRemoteDataSource implements TweetsDataSource {
     }
 
     @Override
-    public void saveTweet(TwitterResponse tweet) {
+    public void saveTweet(Tweet tweet) {
 
     }
 
     @Override
-    public TwitterResponse postTweet(String tweetMessage) {
-        postedTweet = new TwitterResponse();
-        final Call<TwitterResponse> response = mTwitterClient.postResponse(tweetMessage);
-        response.enqueue(new Callback<TwitterResponse>() {
+    public Tweet postTweet(String tweetMessage) {
+        postedTweet = new Tweet();
+        final Call<Tweet> response = mTwitterClient.postResponse(tweetMessage);
+        response.enqueue(new Callback<Tweet>() {
             @Override
-            public void onResponse(Call<TwitterResponse> call, Response<TwitterResponse> response) {
+            public void onResponse(Call<Tweet> call, Response<Tweet> response) {
                 postedTweet = response.body();
             }
 
             @Override
-            public void onFailure(Call<TwitterResponse> call, Throwable t) {
+            public void onFailure(Call<Tweet> call, Throwable t) {
                 postedTweet = null;
             }
         });

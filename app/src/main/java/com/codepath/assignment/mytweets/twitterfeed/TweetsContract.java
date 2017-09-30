@@ -2,7 +2,7 @@ package com.codepath.assignment.mytweets.twitterfeed;
 
 import com.codepath.assignment.mytweets.BasePresenter;
 import com.codepath.assignment.mytweets.BaseView;
-import com.codepath.assignment.mytweets.model.TwitterResponse;
+import com.codepath.assignment.mytweets.model.Tweet;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public interface TweetsContract {
 
         void setLoadingIndicator(boolean active);
 
-        void showTweets(List<TwitterResponse> tweets);
+        void showTweets(List<Tweet> tweets);
 
         void showComposeTweetDialog();
 
@@ -24,9 +24,13 @@ public interface TweetsContract {
 
         void showNoTweets();
 
+        void showNewTweetsSinceLastLoad(List<Tweet> tweets);
+
         void showSuccessfullyPostedTweetMessage();
 
         boolean isActive();
+
+        void showMoreTweets(List<Tweet> tweets);
 
     }
 
@@ -36,7 +40,9 @@ public interface TweetsContract {
 
         void result(int requestCode, int resultCode);
 
-        void loadTasks(boolean forceUpdate);
+        void loadTweets(boolean forceUpdate);
+
+        void loadMoreTweets(String maxId, String sinceId, boolean swipeToRefresh);
 
         void composeNewTweet();
 

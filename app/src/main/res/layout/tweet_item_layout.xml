@@ -24,7 +24,6 @@
             android:gravity="center"
             tools:text="@string/name_placeholder"
             style="@style/tw__TweetFullName.Compact"
-            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -36,8 +35,10 @@
             android:paddingBottom="@dimen/padding_8"
             android:layout_below="@id/tvName"
             android:layout_width="match_parent"
-            style="@style/tw__TweetText.Quote"
+            style="@style/tw__TweetText.Compact"
             tools:text="@string/tweet_content"
+            android:autoLink="all"
+            android:linksClickable="true"
             android:layout_height="wrap_content"/>
 
         <TextView

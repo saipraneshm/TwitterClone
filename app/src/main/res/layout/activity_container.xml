@@ -31,7 +31,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="@color/colorWhite"
-
+                    app:logo="@drawable/ic_twitter_social_icon_circle_white"
                     app:title="@string/app_name"
                     app:elevation="@dimen/default_elevation"
                     app:layout_scrollFlags="scroll|enterAlways"

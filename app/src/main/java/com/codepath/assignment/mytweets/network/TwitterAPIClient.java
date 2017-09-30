@@ -1,14 +1,16 @@
 package com.codepath.assignment.mytweets.network;
 
 
-import com.codepath.assignment.mytweets.model.TwitterResponse;
+import com.codepath.assignment.mytweets.model.Tweet;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 /**
  * Created by saip92 on 9/26/2017.
@@ -17,9 +19,12 @@ import retrofit2.http.Query;
 public interface TwitterAPIClient {
 
     @GET("statuses/home_timeline.json")
-    Call<List<TwitterResponse>> getResponse();
+    Call<List<Tweet>> getResponse();
 
     @POST("statuses/update.json")
-    Call<TwitterResponse> postResponse(@Query("status") String body);
+    Call<Tweet> postResponse(@Query("status") String body);
+
+    @GET("statuses/home_timeline.json")
+    Call<List<Tweet>> getResponse(@QueryMap Map<String, String> queryParams);
 
 }

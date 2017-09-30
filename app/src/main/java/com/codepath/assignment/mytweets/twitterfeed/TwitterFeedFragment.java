@@ -6,18 +6,23 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.assignment.mytweets.R;
 import com.codepath.assignment.mytweets.databinding.FragmentTwitterFeedBinding;
-import com.codepath.assignment.mytweets.model.TwitterResponse;
+import com.codepath.assignment.mytweets.model.Tweet;
+import com.codepath.assignment.mytweets.util.EndlessRecyclerViewScrollListener;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -26,11 +31,16 @@ import java.util.List;
 public class TwitterFeedFragment extends Fragment implements TweetsContract.View {
 
 
+    private static final String TAG = TwitterFeedFragment.class.getSimpleName();
     private TweetsContract.Presenter mPresenter;
 
     private TwitterFeedAdapter mAdapter;
 
     FragmentTwitterFeedBinding mTwitterFeedBinding;
+
+    private EndlessRecyclerViewScrollListener mScrollListener;
+
+    private LinkedList<Tweet> mTweets = new LinkedList<>();
 
 
     public TwitterFeedFragment() {
@@ -40,13 +50,14 @@ public class TwitterFeedFragment extends Fragment implements TweetsContract.View
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAdapter = new TwitterFeedAdapter(getActivity(),new ArrayList<TwitterResponse>());
+        mAdapter = new TwitterFeedAdapter(getActivity(),mTweets);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mPresenter.start();
+        mPresenter.loadMoreTweets(null, null, false);
     }
 
     @Override
@@ -61,14 +72,39 @@ public class TwitterFeedFragment extends Fragment implements TweetsContract.View
         mTwitterFeedBinding = DataBindingUtil
                 .inflate(inflater,R.layout.fragment_twitter_feed,container, false);
 
-        mTwitterFeedBinding.rvTwitterFeed.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mTwitterFeedBinding.rvTwitterFeed.setLayoutManager(layoutManager);
         mTwitterFeedBinding.rvTwitterFeed.setAdapter(mAdapter);
         RecyclerView.ItemDecoration itemDecoration = new
                 DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
 
+        mScrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                    mPresenter.loadMoreTweets(mTweets.get(mTweets.size()-1).getIdStr()
+                            ,1 + "", false);
+            }
+        };
+
+        mTwitterFeedBinding.rvTwitterFeed.addOnScrollListener(mScrollListener);
         mTwitterFeedBinding.rvTwitterFeed.addItemDecoration(itemDecoration);
 
-        mPresenter.loadTasks(true);
+        mTwitterFeedBinding.swipeContainer.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                mPresenter.loadMoreTweets(null,mTweets.getFirst().getIdStr(),true);
+
+            }
+        });
+
+        mTwitterFeedBinding.swipeContainer.setColorSchemeColors
+                (ContextCompat.getColor(getActivity(),android.R.color.holo_blue_bright),
+                        ContextCompat.getColor(getActivity(),android.R.color.holo_green_light),
+                        ContextCompat.getColor(getActivity(),android.R.color.holo_orange_light),
+                        ContextCompat.getColor(getActivity(),android.R.color.holo_red_light));
+
 
         return mTwitterFeedBinding.getRoot();
     }
@@ -81,11 +117,11 @@ public class TwitterFeedFragment extends Fragment implements TweetsContract.View
 
     @Override
     public void setLoadingIndicator(boolean active) {
-
+        mTwitterFeedBinding.swipeContainer.setRefreshing(active);
     }
 
     @Override
-    public void showTweets(List<TwitterResponse> tweets) {
+    public void showTweets(List<Tweet> tweets) {
         mAdapter.addAllTweets(tweets);
     }
 
@@ -105,6 +141,12 @@ public class TwitterFeedFragment extends Fragment implements TweetsContract.View
     }
 
     @Override
+    public void showNewTweetsSinceLastLoad(List<Tweet> tweets) {
+        Log.d(TAG,"showNewTweets has been called with" + tweets);
+        mAdapter.addAllToFirst(tweets);
+    }
+
+    @Override
     public void showSuccessfullyPostedTweetMessage() {
 
     }
@@ -112,5 +154,12 @@ public class TwitterFeedFragment extends Fragment implements TweetsContract.View
     @Override
     public boolean isActive() {
         return isAdded();
+    }
+
+
+    @Override
+    public void showMoreTweets(List<Tweet> tweets) {
+        mTweets.addAll(tweets);
+        mAdapter.appendTweets(tweets);
     }
 }

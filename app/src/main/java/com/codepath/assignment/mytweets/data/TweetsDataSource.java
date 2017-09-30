@@ -2,7 +2,7 @@ package com.codepath.assignment.mytweets.data;
 
 import android.support.annotation.NonNull;
 
-import com.codepath.assignment.mytweets.model.TwitterResponse;
+import com.codepath.assignment.mytweets.model.Tweet;
 
 import java.util.List;
 
@@ -14,25 +14,27 @@ public interface TweetsDataSource {
 
 
     interface LoadTweetsCallback{
-        void onTweetsLoaded(List<TwitterResponse> tweets);
+        void onTweetsLoaded(List<Tweet> tweets);
         void onDataNotAvailable();
     }
 
     interface GetTweetCallback{
-        void onTweetLoaded(TwitterResponse tweet);
+        void onTweetLoaded(Tweet tweet);
         void onDataNotAvailable();
     }
 
 
-    void getTweets(@NonNull LoadTweetsCallback callback);
+    void getMoreTweets(@NonNull LoadTweetsCallback callback);
+
+    void getMoreTweets(String maxId, String sinceId, @NonNull LoadTweetsCallback callback);
 
     void getTweet(@NonNull String tweetId, @NonNull GetTweetCallback callback);
 
     void deleteAllTweets();
 
-    void saveTweet(TwitterResponse tweet);
+    void saveTweet(Tweet tweet);
 
-    TwitterResponse postTweet(String tweetMessage);
+    Tweet postTweet(String tweetMessage);
 
     void refreshTweets();
 

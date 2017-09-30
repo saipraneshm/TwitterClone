@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.codepath.assignment.mytweets.data.TweetsDataSource;
 import com.codepath.assignment.mytweets.data.TweetsRepository;
-import com.codepath.assignment.mytweets.model.TwitterResponse;
+import com.codepath.assignment.mytweets.model.Tweet;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class TweetsPresenter implements TweetsContract.Presenter {
 
     @Override
     public void start() {
-        loadTasks(false);
+        loadTweets(false);
     }
 
     @Override
@@ -40,12 +40,51 @@ public class TweetsPresenter implements TweetsContract.Presenter {
     }
 
     @Override
-    public void loadTasks(boolean forceUpdate) {
-        loadTasks(forceUpdate || mFirstLoad, true);
+    public void loadTweets(boolean forceUpdate) {
+        loadTweets(forceUpdate || mFirstLoad, true);
         mFirstLoad = false;
     }
 
-    private void loadTasks(boolean forceUpdate, final boolean showLoadingUI) {
+    @Override
+    public void loadMoreTweets(String maxId, String sinceId, boolean swipeToRefresh) {
+        loadTweets(maxId, sinceId, true, swipeToRefresh);
+    }
+
+    private void loadTweets(String maxId, String sinceId, final boolean showLoadingUI,
+                            final boolean swipeToRefresh) {
+        if(showLoadingUI){
+            mTweetsView.setLoadingIndicator(true);
+        }
+
+        mTweetsRepository.getMoreTweets(maxId, sinceId, new TweetsDataSource.LoadTweetsCallback() {
+            @Override
+            public void onTweetsLoaded(List<Tweet> tweets) {
+                if(!mTweetsView.isActive()) return;
+
+                if(showLoadingUI) mTweetsView.setLoadingIndicator(false);
+
+                if(tweets.isEmpty()){
+                    mTweetsView.showNoTweets();
+                }else{
+                    if(swipeToRefresh)
+                        mTweetsView.showNewTweetsSinceLastLoad(tweets);
+                    else
+                        mTweetsView.showMoreTweets(tweets);
+                }
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                if(showLoadingUI) mTweetsView.setLoadingIndicator(false);
+                if(!mTweetsView.isActive())
+                    return;
+
+                mTweetsView.showLoadingTweetsError();
+            }
+        });
+    }
+
+    private void loadTweets(boolean forceUpdate, final boolean showLoadingUI) {
         if(showLoadingUI){
             mTweetsView.setLoadingIndicator(true);
         }
@@ -54,9 +93,9 @@ public class TweetsPresenter implements TweetsContract.Presenter {
             mTweetsRepository.refreshTweets();
         }
 
-        mTweetsRepository.getTweets(new TweetsDataSource.LoadTweetsCallback() {
+        mTweetsRepository.getMoreTweets(new TweetsDataSource.LoadTweetsCallback() {
             @Override
-            public void onTweetsLoaded(List<TwitterResponse> tweets) {
+            public void onTweetsLoaded(List<Tweet> tweets) {
 
                 if(!mTweetsView.isActive()) return;
 
@@ -68,6 +107,8 @@ public class TweetsPresenter implements TweetsContract.Presenter {
             @Override
             public void onDataNotAvailable() {
 
+                if(showLoadingUI) mTweetsView.setLoadingIndicator(false);
+
                 if(!mTweetsView.isActive())
                     return;
 
@@ -77,7 +118,7 @@ public class TweetsPresenter implements TweetsContract.Presenter {
         });
     }
 
-    private void processTweets(List<TwitterResponse> tweets) {
+    private void processTweets(List<Tweet> tweets) {
         if(tweets.isEmpty()){
             mTweetsView.showNoTweets();
         }else{

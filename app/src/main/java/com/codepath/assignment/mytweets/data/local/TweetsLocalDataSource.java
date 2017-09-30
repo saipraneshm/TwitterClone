@@ -5,8 +5,8 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.codepath.assignment.mytweets.data.TweetsDataSource;
-import com.codepath.assignment.mytweets.model.TwitterResponse;
-import com.codepath.assignment.mytweets.model.TwitterResponse_Table;
+import com.codepath.assignment.mytweets.model.Tweet;
+import com.codepath.assignment.mytweets.model.Tweet_Table;
 import com.raizlabs.android.dbflow.config.DatabaseDefinition;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -37,14 +37,14 @@ public class TweetsLocalDataSource implements TweetsDataSource {
 
 
     @Override
-    public void getTweets(@NonNull final LoadTweetsCallback callback) {
+    public void getMoreTweets(@NonNull final LoadTweetsCallback callback) {
         SQLite.select()
-                .from(TwitterResponse.class)
+                .from(Tweet.class)
                 .async().queryListResultCallback
-                (new QueryTransaction.QueryResultListCallback<TwitterResponse>() {
+                (new QueryTransaction.QueryResultListCallback<Tweet>() {
             @Override
             public void onListQueryResult
-                    (QueryTransaction transaction, @NonNull List<TwitterResponse> tResult) {
+                    (QueryTransaction transaction, @NonNull List<Tweet> tResult) {
                 if(!tResult.isEmpty())
                     callback.onTweetsLoaded(tResult);
                 else
@@ -54,18 +54,23 @@ public class TweetsLocalDataSource implements TweetsDataSource {
     }
 
     @Override
+    public void getMoreTweets(String maxId, String sinceId, @NonNull LoadTweetsCallback callback) {
+
+    }
+
+    @Override
     public void getTweet(@NonNull String tweetId, @NonNull final GetTweetCallback callback) {
         SQLite.select()
-                .from(TwitterResponse.class)
-                .where(TwitterResponse_Table.idStr.is(tweetId))
+                .from(Tweet.class)
+                .where(Tweet_Table.idStr.is(tweetId))
                 .async()
                 .querySingleResultCallback
-                        (new QueryTransaction.QueryResultSingleCallback<TwitterResponse>() {
+                        (new QueryTransaction.QueryResultSingleCallback<Tweet>() {
                     @Override
                     public void onSingleQueryResult(QueryTransaction transaction,
-                                                    @Nullable TwitterResponse twitterResponse) {
-                         if(twitterResponse != null){
-                             callback.onTweetLoaded(twitterResponse);
+                                                    @Nullable Tweet tweet) {
+                         if(tweet != null){
+                             callback.onTweetLoaded(tweet);
                          }else
                              callback.onDataNotAvailable();
                     }
@@ -75,11 +80,11 @@ public class TweetsLocalDataSource implements TweetsDataSource {
     @Override
     public void deleteAllTweets() {
         SQLite.delete()
-                .from(TwitterResponse.class);
+                .from(Tweet.class);
     }
 
     @Override
-    public void saveTweet(final TwitterResponse tweet) {
+    public void saveTweet(final Tweet tweet) {
         DatabaseDefinition database = FlowManager.getDatabase(TweetsDatabase.class);
         Transaction transaction = database.beginTransactionAsync(new ITransaction() {
             @Override
@@ -103,7 +108,7 @@ public class TweetsLocalDataSource implements TweetsDataSource {
     }
 
     @Override
-    public TwitterResponse postTweet(String tweetMessage) {
+    public Tweet postTweet(String tweetMessage) {
         return null;
     }
 
