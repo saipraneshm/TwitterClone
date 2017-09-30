@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_marginStart="@dimen/margin_8"
+            android:layout_marginEnd="@dimen/margin_8"
+            android:paddingTop="@dimen/padding_8"
+            android:layout_alignParentStart="true"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:src="@mipmap/ic_launcher_round"/>
+
+        <TextView
+            android:id="@+id/tvName"
+            android:paddingStart="@dimen/padding_8"
+            android:paddingTop="@dimen/padding_8"
+            android:paddingBottom="@dimen/padding_8"
+            android:layout_toEndOf="@id/ivAvatar"
+            android:gravity="center"
+            tools:text="@string/name_placeholder"
+            style="@style/tw__TweetFullName.Compact"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvTweetContent"
+            android:layout_toEndOf="@id/ivAvatar"
+            android:paddingStart="@dimen/padding_8"
+            android:paddingEnd="@dimen/padding_8"
+            android:paddingBottom="@dimen/padding_8"
+            android:layout_below="@id/tvName"
+            android:layout_width="match_parent"
+            style="@style/tw__TweetText.Quote"
+            tools:text="@string/tweet_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            style="@style/tw__TweetScreenName.Compact"
+            tools:text="@string/username_placeholder"
+            android:paddingStart="@dimen/padding_8"
+            android:paddingTop="@dimen/padding_8"
+            android:maxLines="1"
+            android:layout_alignBaseline="@id/tvName"
+            android:layout_toEndOf="@id/tvName"/>
+
+        <TextView
+            android:id="@+id/tvTweetTime"
+            android:text="@string/time_placeholder"
+            android:textAlignment="gravity"
+            android:layout_toEndOf="@id/tvUserName"
+            android:layout_alignBaseline="@id/tvUserName"
+            style="@style/tw__TweetTimestamp.Compact"
+            android:paddingLeft="@dimen/padding_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+
+
+        <LinearLayout
+            android:padding="@dimen/padding_8"
+            android:layout_toEndOf="@id/ivAvatar"
+            android:layout_below="@id/tvTweetContent"
+            android:id="@+id/llTweetBtns"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/imgBtnComments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawableStart="@drawable/ic_chat_bubble_outline_black_18px"
+                tools:text="@string/comments_tv"
+                android:background="@android:color/transparent"
+                android:drawablePadding="@dimen/padding_8"
+                />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/imgBtnReTweet"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/repeat_count"
+                android:drawableStart="@drawable/ic_repeat_black_18px"
+                android:background="@android:color/transparent"
+                android:drawablePadding="@dimen/padding_8"
+                />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/imgBtnLike"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/repeat_count"
+                android:drawableStart="@drawable/ic_favorite_border_black_18px"
+                android:background="@android:color/transparent"
+                android:drawablePadding="@dimen/padding_8"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>

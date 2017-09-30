@@ -3,7 +3,7 @@
 
     <string name="com.twitter.sdk.android.CONSUMER_KEY">2LW6qNf8mYuleM9Zv1Eo2W6V8</string>
     <string name="com.twitter.sdk.android.CONSUMER_SECRET">5eJnnnmHHfnMFkQyOJ8U9I21QSUvVCX6DtxV1ftRzJWgr3IufL</string>
-    <string name="name_placeholder">Diamond Candles</string>
+    <string name="name_placeholder">Diamond</string>
     <string name="username_placeholder">\@diamondCandlesasd</string>
     <string name="time_placeholder">16m</string>
     <string name="tweet_content">Fancy us to win the match? New customers can get 20/1 on us right here, did you get that?</string>

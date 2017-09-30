@@ -6,7 +6,7 @@
         android:id="@+id/root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.TwitterFeedActivity">
+        tools:context=".twitterfeed.TwitterFeedActivity">
 
         <android.support.design.widget.CoordinatorLayout
             android:id="@+id/content"
@@ -31,9 +31,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="@color/colorWhite"
+
                     app:title="@string/app_name"
                     app:elevation="@dimen/default_elevation"
-                    app:layout_scrollFlags="scroll|enterAlways"/>
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    style="@style/Base.Widget.AppCompat.Light.ActionBar"/>
             </android.support.design.widget.AppBarLayout>
 
             <android.support.design.widget.FloatingActionButton

@@ -87,17 +87,30 @@ public class TwitterResponse extends BaseModel {
         @Expose
         private Entities entities;
 
+        @SerializedName("favorite_count")
+        @Expose
+        private Integer favoriteCount;
+
+
+        public Integer getFavoriteCount() {
+            return favoriteCount;
+        }
+
+        public void setFavoriteCount(Integer favoriteCount) {
+            this.favoriteCount = favoriteCount;
+        }
+
         public Entities getEntities() {
-            return entities;
-        }
+                return entities;
+            }
 
-        public void setEntities(Entities entities) {
-            this.entities = entities;
-        }
+            public void setEntities(Entities entities) {
+                this.entities = entities;
+            }
 
-    public Boolean getTruncated() {
-            return truncated;
-        }
+        public Boolean getTruncated() {
+                return truncated;
+            }
 
         public void setTruncated(Boolean truncated) {
             this.truncated = truncated;
