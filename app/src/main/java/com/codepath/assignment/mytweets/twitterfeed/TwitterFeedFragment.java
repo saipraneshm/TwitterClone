@@ -169,14 +169,13 @@ public class TwitterFeedFragment extends VisibleFragment implements TweetsContra
 
     @Override
     public void showMoreTweets(List<Tweet> tweets) {
-        mTweets.addAll(tweets);
         mAdapter.appendTweets(tweets);
     }
 
     @Override
     public void postNewTweetToTimeline(Tweet tweet) {
-        mTweets.addFirst(tweet);
         mAdapter.addToFirst(tweet);
+        mTwitterFeedBinding.rvTwitterFeed.smoothScrollToPosition(0);
     }
 
 }
