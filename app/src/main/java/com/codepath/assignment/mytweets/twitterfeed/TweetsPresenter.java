@@ -1,6 +1,7 @@
 package com.codepath.assignment.mytweets.twitterfeed;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.codepath.assignment.mytweets.data.TweetsDataSource;
 import com.codepath.assignment.mytweets.data.TweetsRepository;
@@ -15,10 +16,9 @@ import java.util.List;
 public class TweetsPresenter implements TweetsContract.Presenter {
 
     private final TweetsRepository mTweetsRepository;
-
     private final TweetsContract.View mTweetsView;
-
     private boolean mFirstLoad = true;
+    private static final String TAG = TweetsRepository.class.getSimpleName();
 
 
     public TweetsPresenter(@NonNull TweetsRepository tweetsRepository,
@@ -31,7 +31,9 @@ public class TweetsPresenter implements TweetsContract.Presenter {
 
     @Override
     public void start() {
-        loadTweets(false);
+
+        Log.d(TAG,"Start called");
+        loadMoreTweets(null, null, false);
     }
 
     @Override
@@ -47,22 +49,25 @@ public class TweetsPresenter implements TweetsContract.Presenter {
 
     @Override
     public void loadMoreTweets(String maxId, String sinceId, boolean swipeToRefresh) {
+        Log.d(TAG,"loadMoreTweets called");
         loadTweets(maxId, sinceId, true, swipeToRefresh);
     }
 
     private void loadTweets(String maxId, String sinceId, final boolean showLoadingUI,
                             final boolean swipeToRefresh) {
         if(showLoadingUI){
+            Log.d(TAG,"setting loading indicator to true");
             mTweetsView.setLoadingIndicator(true);
         }
 
+        Log.d(TAG,"making network call");
         mTweetsRepository.getMoreTweets(maxId, sinceId, new TweetsDataSource.LoadTweetsCallback() {
             @Override
             public void onTweetsLoaded(List<Tweet> tweets) {
+                Log.d(TAG,"inside tweetsrepo loadTweets " + tweets);
                 if(!mTweetsView.isActive()) return;
 
                 if(showLoadingUI) mTweetsView.setLoadingIndicator(false);
-
                 if(tweets.isEmpty()){
                     mTweetsView.showNoTweets();
                 }else{
@@ -75,10 +80,11 @@ public class TweetsPresenter implements TweetsContract.Presenter {
 
             @Override
             public void onDataNotAvailable() {
-                if(showLoadingUI) mTweetsView.setLoadingIndicator(false);
+                Log.d(TAG,"inside tweetsrepo loadTweets not available");
                 if(!mTweetsView.isActive())
                     return;
 
+                if(showLoadingUI) mTweetsView.setLoadingIndicator(false);
                 mTweetsView.showLoadingTweetsError();
             }
         });
@@ -107,10 +113,10 @@ public class TweetsPresenter implements TweetsContract.Presenter {
             @Override
             public void onDataNotAvailable() {
 
-                if(showLoadingUI) mTweetsView.setLoadingIndicator(false);
-
                 if(!mTweetsView.isActive())
                     return;
+
+                if(showLoadingUI) mTweetsView.setLoadingIndicator(false);
 
                 mTweetsView.showLoadingTweetsError();
 
@@ -128,6 +134,6 @@ public class TweetsPresenter implements TweetsContract.Presenter {
 
     @Override
     public void composeNewTweet() {
-
+        mTweetsView.showComposeTweetDialog();
     }
 }

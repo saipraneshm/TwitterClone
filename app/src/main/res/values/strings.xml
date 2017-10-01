@@ -30,4 +30,10 @@ Aliquam at mattis diam. Vestibulum ut ullamcorper ligula, quis feugiat lacus. Se
 Donec vestibulum pulvinar magna ac dapibus. Pellentesque scelerisque, mi vitae congue vestibulum, justo diam interdum lectus, sit amet ullamcorper nibh neque non tortor. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In a venenatis ante. Proin arcu nisl, rutrum quis ipsum ut, hendrerit pellentesque tortor. Vivamus luctus mi ligula, in egestas est varius eleifend. Etiam elit libero, dictum eget libero nec, fringilla semper orci. Sed euismod mollis urna eu feugiat. Etiam ut odio massa. Curabitur vehicula elit et bibendum fermentum. Aenean faucibus dolor vel quam placerat, vitae elementum mi suscipit.
 
 Curabitur blandit diam vel dui posuere pulvinar. Curabitur pretium feugiat nulla a tempus. Donec id purus sem. Vestibulum lobortis dignissim vehicula. Pellentesque cursus, elit eget elementum finibus, risus lorem mattis velit, sed volutpat orci tortor id tellus. Curabitur elementum aliquam dignissim. Curabitur vitae molestie magna, quis iaculis nunc. Sed ultricies venenatis malesuada. Sed viverra blandit felis. Aliquam sagittis sem et odio sodales posuere. Cras non laoreet velit, blandit dignissim justo. Vestibulum et sem et purus semper egestas eget nec risus.</string>
+    <string name="compose_tweet_hint">What\'s Happening ?</string>
+    <string name="send_tweet">Tweet</string>
+    <string name="tweet_count">140</string>
+    <string name="save_draft_message">Save draft?</string>
+    <string name="delete_message">DELETE</string>
+    <string name="save_message">SAVE</string>
 </resources>

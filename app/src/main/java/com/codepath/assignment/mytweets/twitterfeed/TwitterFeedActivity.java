@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.View;
 
 import com.codepath.assignment.mytweets.Injection;
 import com.codepath.assignment.mytweets.activity.abs.SingleFragmentActivity;
+import com.codepath.assignment.mytweets.databinding.ActivityContainerBinding;
+import com.codepath.assignment.mytweets.fragment.abs.VisibleFragment;
 
 
 public class TwitterFeedActivity extends SingleFragmentActivity {
@@ -22,6 +25,7 @@ public class TwitterFeedActivity extends SingleFragmentActivity {
     }
 
 
+
     public static Intent getIntent(Context context){
         Intent intent = new Intent(context, TwitterFeedActivity.class);
         return intent;
@@ -33,5 +37,13 @@ public class TwitterFeedActivity extends SingleFragmentActivity {
         mTweetsPresenter = new TweetsPresenter(Injection.provideTweetsRepository(),
                 mTwitterFeedFragment);
         super.onCreate(savedInstanceState);
+
+
+        getBinding().btnCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mTweetsPresenter.composeNewTweet();
+            }
+        });
     }
 }

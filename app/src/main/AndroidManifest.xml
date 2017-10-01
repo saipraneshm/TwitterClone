@@ -3,6 +3,7 @@
           package="com.codepath.assignment.mytweets">
 
     <application
+
         android:name=".application.TwitterApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_twitter_launcher"
@@ -16,7 +17,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".twitterfeed.TwitterFeedActivity">
+        <activity
+            android:name=".twitterfeed.TwitterFeedActivity"
+            android:windowSoftInputMode="adjustResize|adjustPan">
         </activity>
     </application>
 

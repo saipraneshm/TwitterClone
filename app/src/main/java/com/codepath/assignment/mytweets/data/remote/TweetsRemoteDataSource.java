@@ -9,6 +9,7 @@ import com.codepath.assignment.mytweets.data.TweetsDataSource;
 import com.codepath.assignment.mytweets.model.Tweet;
 import com.codepath.assignment.mytweets.network.TwitterAPIClient;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,12 +55,15 @@ public class TweetsRemoteDataSource implements TweetsDataSource {
             @Override
             public void onResponse(Call<List<Tweet>> call,
                                    Response<List<Tweet>> response) {
+                Log.d(TAG,"inside on Response firstGetMore: " + response.body() + ", " + response.errorBody() + " , " + response.headers());
                 List<Tweet> arrayList = response.body();
                 if(arrayList != null && arrayList.size() > 0){
                     callback.onTweetsLoaded(arrayList);
                     for(Tweet res : arrayList){
                         Log.d("RESPONSE",res.toString());
                     }
+                }else{
+                    callback.onDataNotAvailable();
                 }
 
                 //Log.d("RESPONSE", arrayList.toString() + " , " + response.body().toString());
@@ -85,17 +89,23 @@ public class TweetsRemoteDataSource implements TweetsDataSource {
             queryParams.put("since_id",sinceId);
         }
 
-        Log.d(TAG, queryParams + " values in hashMap" + maxId + " , " + sinceId);
+
+        if(maxId == null && sinceId == null){
+           /* getMoreTweets(callback);
+            return;*/
+           queryParams.put("count","20");
+        }
+        Log.d(TAG, queryParams + " values in hashMap " + maxId + " , " + sinceId);
         final Call<List<Tweet>> response = mTwitterClient.getResponse(queryParams);
         response.enqueue(new Callback<List<Tweet>>() {
             @Override
             public void onResponse(Call<List<Tweet>> call, Response<List<Tweet>> response) {
+                Log.d(TAG,"inside on Response sdecondGetMore" + response.body() + ", " + response.errorBody() + " , " + response.headers() + " , " + response.code());
                 List<Tweet> arrayList = response.body();
                 if(arrayList != null && arrayList.size() > 0){
                     callback.onTweetsLoaded(arrayList);
-                    /*for(Tweet res : arrayList){
-                        Log.d("RESPONSE",res.toString());
-                    }*/
+                }else{
+                    callback.onDataNotAvailable();
                 }
             }
 

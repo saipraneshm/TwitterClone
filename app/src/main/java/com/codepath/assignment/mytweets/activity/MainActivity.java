@@ -54,5 +54,4 @@ public class MainActivity extends AppCompatActivity {
         mLoginButton.onActivityResult(requestCode,resultCode,data);
     }
 
-
 }

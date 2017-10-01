@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 
 import com.codepath.assignment.mytweets.R;
 import com.codepath.assignment.mytweets.databinding.FragmentTwitterFeedBinding;
+import com.codepath.assignment.mytweets.fragment.ComposeTweetDialog;
+import com.codepath.assignment.mytweets.fragment.abs.VisibleFragment;
 import com.codepath.assignment.mytweets.model.Tweet;
 import com.codepath.assignment.mytweets.util.EndlessRecyclerViewScrollListener;
 
@@ -28,7 +30,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TwitterFeedFragment extends Fragment implements TweetsContract.View {
+public class TwitterFeedFragment extends VisibleFragment implements TweetsContract.View {
 
 
     private static final String TAG = TwitterFeedFragment.class.getSimpleName();
@@ -56,8 +58,8 @@ public class TwitterFeedFragment extends Fragment implements TweetsContract.View
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(TAG,"OnResume called");
         mPresenter.start();
-        mPresenter.loadMoreTweets(null, null, false);
     }
 
     @Override
@@ -82,7 +84,7 @@ public class TwitterFeedFragment extends Fragment implements TweetsContract.View
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                     mPresenter.loadMoreTweets(mTweets.get(mTweets.size()-1).getIdStr()
-                            ,1 + "", false);
+                           ,1 + "", false);
             }
         };
 
@@ -104,6 +106,8 @@ public class TwitterFeedFragment extends Fragment implements TweetsContract.View
                         ContextCompat.getColor(getActivity(),android.R.color.holo_green_light),
                         ContextCompat.getColor(getActivity(),android.R.color.holo_orange_light),
                         ContextCompat.getColor(getActivity(),android.R.color.holo_red_light));
+
+        mPresenter.start();
 
 
         return mTwitterFeedBinding.getRoot();
@@ -128,6 +132,10 @@ public class TwitterFeedFragment extends Fragment implements TweetsContract.View
     @Override
     public void showComposeTweetDialog() {
 
+        Log.d(TAG, "composing new tweet dialog");
+        ComposeTweetDialog tweetDialog = new ComposeTweetDialog();
+        tweetDialog.setTargetFragment(TwitterFeedFragment.this, 300);
+        tweetDialog.show(getFragmentManager(), "compose_tweet");
     }
 
     @Override
@@ -162,4 +170,5 @@ public class TwitterFeedFragment extends Fragment implements TweetsContract.View
         mTweets.addAll(tweets);
         mAdapter.appendTweets(tweets);
     }
+
 }
