@@ -22,9 +22,13 @@ public class Tweet extends BaseModel {
         @SerializedName("truncated")
         @Expose
         private Boolean truncated;
+
+        @Column
         @SerializedName("created_at")
         @Expose
         private String createdAt;
+
+
         @SerializedName("favorited")
         @Expose
         private Boolean favorited;
@@ -36,9 +40,12 @@ public class Tweet extends BaseModel {
         @SerializedName("in_reply_to_user_id_str")
         @Expose
         private Object inReplyToUserIdStr;
+
+        @Column
         @SerializedName("text")
         @Expose
         private String text;
+
         @SerializedName("contributors")
         @Expose
         private Object contributors;
@@ -49,6 +56,7 @@ public class Tweet extends BaseModel {
         @Expose
         private Long id;
 
+        @Column
         @SerializedName("retweet_count")
         @Expose
         private Integer retweetCount;
@@ -270,7 +278,7 @@ public class Tweet extends BaseModel {
                 relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
                         System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
                 String[] time = relativeDate.split(" ");
-               // Log.d("REALTIVEDATE", time[0] + " " + time[1]);
+                Log.d("REALTIVEDATE", time[0] + " " + time[1]);
                 return time[0] + time[1].charAt(0);
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -282,6 +290,7 @@ public class Tweet extends BaseModel {
     @Override
     public String toString() {
         return "Tweet{" +
+                "id=" +idStr +
                 "user=" + user.toString() +
                 '}';
     }

@@ -1,6 +1,8 @@
 package com.codepath.assignment.mytweets.twitterfeed;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -21,9 +23,10 @@ import com.codepath.assignment.mytweets.databinding.FragmentTwitterFeedBinding;
 import com.codepath.assignment.mytweets.fragment.ComposeTweetDialog;
 import com.codepath.assignment.mytweets.fragment.abs.VisibleFragment;
 import com.codepath.assignment.mytweets.model.Tweet;
+import com.codepath.assignment.mytweets.receiver.ConnectivityBroadcastReceiver;
+import com.codepath.assignment.mytweets.util.AppUtils;
 import com.codepath.assignment.mytweets.util.EndlessRecyclerViewScrollListener;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,6 +46,7 @@ public class TwitterFeedFragment extends VisibleFragment implements TweetsContra
     private EndlessRecyclerViewScrollListener mScrollListener;
 
     private LinkedList<Tweet> mTweets = new LinkedList<>();
+    private boolean hasInternet = true;
 
 
     public TwitterFeedFragment() {
@@ -58,8 +62,45 @@ public class TwitterFeedFragment extends VisibleFragment implements TweetsContra
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG,"OnResume called");
-        mPresenter.start();
+
+    }
+
+    @Override
+    protected BroadcastReceiver createConnectivityBroadcastReceiver() {
+        ConnectivityBroadcastReceiver receiver = new ConnectivityBroadcastReceiver();
+        receiver.setListener(new ConnectivityBroadcastReceiver.OnNetworkChangeListener() {
+            @Override
+            public void onNetworkChange(boolean isConnected) {
+                if(hasInternet == isConnected){
+                    return;
+                }
+                if(isConnected){
+                    hasInternet = true;
+                    showInternetConnectedSnackBar();
+                    //Log.d(TAG,"Connected to the internet");
+                }else{
+                  //  mPresenter.saveTweets(mTweets);
+                    hasInternet = false;
+                    AppUtils.showNoInternetDialog(getActivity());
+                    //Log.d(TAG,"Is not connected to the internet");
+                }
+
+                mPresenter.internetStatus(hasInternet);
+            }
+        });
+
+
+        return receiver;
+    }
+
+    private void showInternetConnectedSnackBar() {
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Log.d(TAG, " OnSaveInstanceState");
+       // mPresenter.saveTweets(mTweets);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -83,6 +124,7 @@ public class TwitterFeedFragment extends VisibleFragment implements TweetsContra
         mScrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                if(hasInternet)
                     mPresenter.loadMoreTweets(mTweets.get(mTweets.size()-1).getIdStr()
                            ,1 + "", false);
             }
@@ -95,8 +137,17 @@ public class TwitterFeedFragment extends VisibleFragment implements TweetsContra
                 new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                Log.d(TAG,"calling onRefresh");
+                if(hasInternet){
+                    if(mTweets != null && mTweets.size() > 0){
+                        mPresenter.loadMoreTweets(null,mTweets.getFirst().getIdStr(),true);
+                    }else{
 
-                mPresenter.loadMoreTweets(null,mTweets.getFirst().getIdStr(),true);
+                        mPresenter.start();
+                    }
+                }
+                else
+                    mPresenter.loadMoreTweets(null,null,true);
 
             }
         });
@@ -107,8 +158,9 @@ public class TwitterFeedFragment extends VisibleFragment implements TweetsContra
                         ContextCompat.getColor(getActivity(),android.R.color.holo_orange_light),
                         ContextCompat.getColor(getActivity(),android.R.color.holo_red_light));
 
-        mPresenter.start();
 
+
+        mPresenter.start();
 
         return mTwitterFeedBinding.getRoot();
     }

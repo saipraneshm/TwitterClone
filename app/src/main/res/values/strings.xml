@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">MyTweets</string>
 
-    <string name="com.twitter.sdk.android.CONSUMER_KEY">2LW6qNf8mYuleM9Zv1Eo2W6V8</string>
-    <string name="com.twitter.sdk.android.CONSUMER_SECRET">5eJnnnmHHfnMFkQyOJ8U9I21QSUvVCX6DtxV1ftRzJWgr3IufL</string>
+    <string name="com.twitter.sdk.android.CONSUMER_KEY">IKymi60wU6SlFGnBQkhZ43Zi2</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET">MV9JkCRLSmWSa9WiGAXwI3s68DItR2dGFPaAQXa5TjiyNL8xGE</string>
     <string name="name_placeholder">Diamond</string>
     <string name="username_placeholder">\@diamondCandlesasd</string>
     <string name="time_placeholder">16m</string>
@@ -36,4 +36,6 @@ Curabitur blandit diam vel dui posuere pulvinar. Curabitur pretium feugiat nulla
     <string name="save_draft_message">Save draft?</string>
     <string name="delete_message">DELETE</string>
     <string name="save_message">SAVE</string>
+    <string name="no_internet_dialog_title">No Internet</string>
+    <string name="no_internet_dialog_message">Not connected to internet</string>
 </resources>

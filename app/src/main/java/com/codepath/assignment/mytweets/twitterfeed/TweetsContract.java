@@ -51,5 +51,9 @@ public interface TweetsContract {
 
         void composeNewTweet();
 
+        void internetStatus(boolean hasInternet);
+
+        void saveTweets(List<Tweet> tweets);
+
     }
 }

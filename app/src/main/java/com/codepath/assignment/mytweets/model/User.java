@@ -11,9 +11,11 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 @Table(database = TweetsDatabase.class)
 public class User extends BaseModel {
 
+    @Column
     @SerializedName("name")
     @Expose
     private String name;
+
     @SerializedName("profile_sidebar_fill_color")
     @Expose
     private String profileSidebarFillColor;
@@ -42,6 +44,8 @@ public class User extends BaseModel {
     @SerializedName("follow_request_sent")
     @Expose
     private Boolean followRequestSent;
+
+    @Column
     @SerializedName("id_str")
     @Expose
     private String idStr;
@@ -60,6 +64,8 @@ public class User extends BaseModel {
     @SerializedName("contributors_enabled")
     @Expose
     private Boolean contributorsEnabled;
+
+    @Column
     @SerializedName("favourites_count")
     @Expose
     private Integer favouritesCount;
@@ -133,6 +139,8 @@ public class User extends BaseModel {
     @SerializedName("show_all_inline_media")
     @Expose
     private Boolean showAllInlineMedia;
+
+    @Column
     @SerializedName("screen_name")
     @Expose
     private String screenName;

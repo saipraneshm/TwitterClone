@@ -12,6 +12,6 @@ public class TweetsDatabase {
 
     public static final String NAME = "TweetsDatabase";
 
-    public static final int VERSION = 2;
+    public static final int VERSION = 5;
 
 }

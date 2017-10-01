@@ -13,10 +13,10 @@ import se.akerfeldt.okhttp.signpost.SigningInterceptor;
 public class RetrofitClient {
 
    // private volatile static Retrofit sRetrofit = null;
-    private static final String CONSUMER_KEY = "2LW6qNf8mYuleM9Zv1Eo2W6V8";
-    private static final String CONSUMER_SECRET = "5eJnnnmHHfnMFkQyOJ8U9I21QSUvVCX6DtxV1ftRzJWgr3IufL";
-    private static final String TOKEN_KEY = "147812816-2q5NBpwu2A8HFsKM9DDBxVgDBqIDtChe7bqo9inL";
-    private static final String TOKEN_SECRET = "OKtuQFMyVbjVPrF9PKffIcbYYzpl6E7lV3Bxpc0hdc4OX";
+    private static final String CONSUMER_KEY = "IKymi60wU6SlFGnBQkhZ43Zi2";
+    private static final String CONSUMER_SECRET = "MV9JkCRLSmWSa9WiGAXwI3s68DItR2dGFPaAQXa5TjiyNL8xGE";
+    private static final String TOKEN_KEY = "914555476012077056-j8hAyoYVI31cpE5eXqNNJBDvwQAJFYh";
+    private static final String TOKEN_SECRET = "nCfRzGvS9vwy5701ZukDfQtcI1arWKAxUh5TZQvUCvYh9";
     private static final String BASE_URL = "https://api.twitter.com/1.1/";
 
     private Retrofit mRetrofit = null;

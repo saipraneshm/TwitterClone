@@ -9,8 +9,10 @@ import com.codepath.assignment.mytweets.model.Tweet;
 import com.codepath.assignment.mytweets.model.Tweet_Table;
 import com.raizlabs.android.dbflow.config.DatabaseDefinition;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
+import com.raizlabs.android.dbflow.structure.database.transaction.FastStoreModelTransaction;
 import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
 import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransaction;
 import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
@@ -37,25 +39,32 @@ public class TweetsLocalDataSource implements TweetsDataSource {
 
 
     @Override
-    public void getMoreTweets(@NonNull final LoadTweetsCallback callback) {
-        SQLite.select()
+    public void getTweets(String maxId, String sinceId, @NonNull final LoadTweetsCallback callback) {
+        /*SQLite.select()
                 .from(Tweet.class)
                 .async().queryListResultCallback
                 (new QueryTransaction.QueryResultListCallback<Tweet>() {
-            @Override
-            public void onListQueryResult
-                    (QueryTransaction transaction, @NonNull List<Tweet> tResult) {
-                if(!tResult.isEmpty())
-                    callback.onTweetsLoaded(tResult);
-                else
-                    callback.onDataNotAvailable();
-            }
-        });
-    }
+                    @Override
+                    public void onListQueryResult
+                            (QueryTransaction transaction, @NonNull List<Tweet> tResult) {
+                        if(!tResult.isEmpty()){
+                            Log.d(TAG,"Loaded results from local database : " + tResult);
+                            callback.onTweetsLoaded(tResult);
+                        }
+                        else{
+                            Log.d(TAG,"couldn't load results from localdatasource ");
+                            callback.onDataNotAvailable();
+                        }
 
-    @Override
-    public void getMoreTweets(String maxId, String sinceId, @NonNull LoadTweetsCallback callback) {
+                    }
+                });*/
 
+        List<Tweet> tweets = SQLite.select().from(Tweet.class).queryList();
+        if(tweets.size() > 0){
+            callback.onTweetsLoaded(tweets);
+        }else{
+            callback.onDataNotAvailable();
+        }
     }
 
     @Override
@@ -79,8 +88,7 @@ public class TweetsLocalDataSource implements TweetsDataSource {
 
     @Override
     public void deleteAllTweets() {
-        SQLite.delete()
-                .from(Tweet.class);
+        Delete.table(Tweet.class);
     }
 
     @Override
@@ -114,6 +122,27 @@ public class TweetsLocalDataSource implements TweetsDataSource {
 
     @Override
     public void refreshTweets() {
+
+    }
+
+    @Override
+    public void saveAllTweets(List<Tweet> tweets) {
+        FastStoreModelTransaction<Tweet> tweetFastStoreModelTransaction = FastStoreModelTransaction
+                .insertBuilder(FlowManager.getModelAdapter(Tweet.class))
+                .addAll(tweets)
+                .build();
+
+        DatabaseDefinition database = FlowManager.getDatabase(TweetsDatabase.class);
+        database.beginTransactionAsync(tweetFastStoreModelTransaction)
+                .build().execute();
+
+        /*for(Tweet tweet : tweets){
+            saveTweet(tweet);
+        }*/
+    }
+
+    @Override
+    public void internetStatus(boolean hasInternet) {
 
     }
 }

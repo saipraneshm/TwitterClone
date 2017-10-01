@@ -1,5 +1,8 @@
 package com.codepath.assignment.mytweets.fragment.abs;
 
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.support.v4.app.Fragment;
 
 /**
@@ -9,6 +12,23 @@ import android.support.v4.app.Fragment;
 public abstract class VisibleFragment extends Fragment {
 
 
+    private BroadcastReceiver connectivityReceiver = null;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        connectivityReceiver = createConnectivityBroadcastReceiver();
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        getActivity().registerReceiver(connectivityReceiver, intentFilter);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(connectivityReceiver);
+    }
+
+    protected abstract BroadcastReceiver createConnectivityBroadcastReceiver();
 
 
 }

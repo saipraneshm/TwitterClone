@@ -25,6 +25,7 @@ public class TweetsPresenter implements TweetsContract.Presenter {
 
     private static final String REQUEST_COMPOSE_TWEET = "requestComposeTweet";
     private static final int COMPOSE_TWEET_REQUEST_CODE = 200;
+    private boolean hasInternet = true;
 
 
     public TweetsPresenter(@NonNull TweetsRepository tweetsRepository,
@@ -37,10 +38,12 @@ public class TweetsPresenter implements TweetsContract.Presenter {
 
     @Override
     public void start() {
-
+      //  mTweetsRepository.refreshTweets();
         Log.d(TAG,"Start called");
         loadMoreTweets(null, null, false);
     }
+
+
 
     @Override
     public void result(int requestCode, int resultCode, Intent data) {
@@ -69,7 +72,7 @@ public class TweetsPresenter implements TweetsContract.Presenter {
 
     @Override
     public void loadTweets(boolean forceUpdate) {
-        loadTweets(forceUpdate || mFirstLoad, true);
+       // loadTweets(forceUpdate || mFirstLoad, true);
         mFirstLoad = false;
     }
 
@@ -87,7 +90,7 @@ public class TweetsPresenter implements TweetsContract.Presenter {
         }
 
         Log.d(TAG,"making network call");
-        mTweetsRepository.getMoreTweets(maxId, sinceId, new TweetsDataSource.LoadTweetsCallback() {
+        mTweetsRepository.getTweets(maxId, sinceId, new TweetsDataSource.LoadTweetsCallback() {
             @Override
             public void onTweetsLoaded(List<Tweet> tweets) {
                 Log.d(TAG,"inside tweetsrepo loadTweets " + tweets);
@@ -97,10 +100,14 @@ public class TweetsPresenter implements TweetsContract.Presenter {
                 if(tweets.isEmpty()){
                     mTweetsView.showNoTweets();
                 }else{
-                    if(swipeToRefresh)
+                    if(swipeToRefresh){
+                       // mTweetsRepository.refreshTweets();
                         mTweetsView.showNewTweetsSinceLastLoad(tweets);
-                    else
+                    }
+                    else{
                         mTweetsView.showMoreTweets(tweets);
+                    }
+
                 }
             }
 
@@ -116,40 +123,6 @@ public class TweetsPresenter implements TweetsContract.Presenter {
         });
     }
 
-    private void loadTweets(boolean forceUpdate, final boolean showLoadingUI) {
-        if(showLoadingUI){
-            mTweetsView.setLoadingIndicator(true);
-        }
-
-        if(forceUpdate){
-            mTweetsRepository.refreshTweets();
-        }
-
-        mTweetsRepository.getMoreTweets(new TweetsDataSource.LoadTweetsCallback() {
-            @Override
-            public void onTweetsLoaded(List<Tweet> tweets) {
-
-                if(!mTweetsView.isActive()) return;
-
-                if(showLoadingUI) mTweetsView.setLoadingIndicator(false);
-
-                processTweets(tweets);
-            }
-
-            @Override
-            public void onDataNotAvailable() {
-
-                if(!mTweetsView.isActive())
-                    return;
-
-                if(showLoadingUI) mTweetsView.setLoadingIndicator(false);
-
-                mTweetsView.showLoadingTweetsError();
-
-            }
-        });
-    }
-
     private void processTweets(List<Tweet> tweets) {
         if(tweets.isEmpty()){
             mTweetsView.showNoTweets();
@@ -161,5 +134,16 @@ public class TweetsPresenter implements TweetsContract.Presenter {
     @Override
     public void composeNewTweet() {
         mTweetsView.showComposeTweetDialog(COMPOSE_TWEET_REQUEST_CODE,REQUEST_COMPOSE_TWEET);
+    }
+
+    @Override
+    public void internetStatus(boolean hasInternet) {
+        this.hasInternet = hasInternet;
+        mTweetsRepository.internetStatus(hasInternet);
+    }
+
+    @Override
+    public void saveTweets(List<Tweet> tweets) {
+        mTweetsRepository.saveAllTweets(tweets);
     }
 }

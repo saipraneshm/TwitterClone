@@ -24,9 +24,7 @@ public interface TweetsDataSource {
     }
 
 
-    void getMoreTweets(@NonNull LoadTweetsCallback callback);
-
-    void getMoreTweets(String maxId, String sinceId, @NonNull LoadTweetsCallback callback);
+    void getTweets(String maxId, String sinceId, @NonNull LoadTweetsCallback callback);
 
     void getTweet(@NonNull String tweetId, @NonNull GetTweetCallback callback);
 
@@ -37,6 +35,10 @@ public interface TweetsDataSource {
     void postTweet(String tweetMessage, GetTweetCallback callback);
 
     void refreshTweets();
+
+    void saveAllTweets(List<Tweet> tweets);
+
+    void internetStatus(boolean hasInternet);
 
 
 }

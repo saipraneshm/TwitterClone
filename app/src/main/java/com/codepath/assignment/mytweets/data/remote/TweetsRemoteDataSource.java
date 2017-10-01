@@ -48,37 +48,10 @@ public class TweetsRemoteDataSource implements TweetsDataSource {
         return INSTANCE;
     }
 
-    @Override
-    public void getMoreTweets(@NonNull final LoadTweetsCallback callback) {
-        final Call<List<Tweet>> response = mTwitterClient.getResponse();
-        response.enqueue(new Callback<List<Tweet>>() {
-            @Override
-            public void onResponse(Call<List<Tweet>> call,
-                                   Response<List<Tweet>> response) {
-                Log.d(TAG,"inside on Response firstGetMore: " + response.body() + ", " + response.errorBody() + " , " + response.headers());
-                List<Tweet> arrayList = response.body();
-                if(arrayList != null && arrayList.size() > 0){
-                    callback.onTweetsLoaded(arrayList);
-                    for(Tweet res : arrayList){
-                        Log.d("RESPONSE",res.toString());
-                    }
-                }else{
-                    callback.onDataNotAvailable();
-                }
 
-                //Log.d("RESPONSE", arrayList.toString() + " , " + response.body().toString());
-            }
-
-            @Override
-            public void onFailure(Call<List<Tweet>> call, Throwable t) {
-                Log.e("RESPONSE","Failure",t);
-                callback.onDataNotAvailable();
-            }
-        });
-    }
 
     @Override
-    public void getMoreTweets(String maxId, String sinceId, @NonNull final LoadTweetsCallback callback) {
+    public void getTweets(String maxId, String sinceId, @NonNull final LoadTweetsCallback callback) {
         Map<String,String> queryParams = new HashMap<>();
 
         if(maxId != null && !TextUtils.isEmpty(maxId)){
@@ -89,18 +62,15 @@ public class TweetsRemoteDataSource implements TweetsDataSource {
             queryParams.put("since_id",sinceId);
         }
 
-
-        if(maxId == null && sinceId == null){
-           /* getMoreTweets(callback);
-            return;*/
-           queryParams.put("count","20");
-        }
         Log.d(TAG, queryParams + " values in hashMap " + maxId + " , " + sinceId);
         final Call<List<Tweet>> response = mTwitterClient.getResponse(queryParams);
         response.enqueue(new Callback<List<Tweet>>() {
             @Override
             public void onResponse(Call<List<Tweet>> call, Response<List<Tweet>> response) {
-                Log.d(TAG,"inside on Response sdecondGetMore" + response.body() + ", " + response.errorBody() + " , " + response.headers() + " , " + response.code());
+                Log.d(TAG,"inside on Response secondGetMore " + response.body() +
+                        ", " + response.errorBody() + " , " +
+                        response.headers() +
+                        " , " + response.code());
                 List<Tweet> arrayList = response.body();
                 if(arrayList != null && arrayList.size() > 0){
                     callback.onTweetsLoaded(arrayList);
@@ -154,6 +124,16 @@ public class TweetsRemoteDataSource implements TweetsDataSource {
 
     @Override
     public void refreshTweets() {
+
+    }
+
+    @Override
+    public void saveAllTweets(List<Tweet> tweets) {
+
+    }
+
+    @Override
+    public void internetStatus(boolean hasInternet) {
 
     }
 }

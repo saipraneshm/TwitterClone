@@ -3,13 +3,10 @@ package com.codepath.assignment.mytweets.data;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.codepath.assignment.mytweets.data.remote.TweetsRemoteDataSource;
 import com.codepath.assignment.mytweets.model.Tweet;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by saip92 on 9/28/2017.
@@ -25,10 +22,11 @@ public class TweetsRepository implements TweetsDataSource {
 
     private final TweetsDataSource mTweetsLocalDataSource;
 
+    private boolean hasInternet = true;
 
-    Map<String, Tweet> mCachedTweets;
+    private static int count = 0;
 
-    boolean mCacheIsDirty = false;
+
 
     private TweetsRepository(@NonNull TweetsDataSource tweetsRemoteDataSource,
                             @NonNull TweetsDataSource tweetsLocalDataSource) {
@@ -48,38 +46,43 @@ public class TweetsRepository implements TweetsDataSource {
 
 
     @Override
-    public void getMoreTweets(@NonNull final LoadTweetsCallback callback) {
-
-        if(mCachedTweets != null && !mCacheIsDirty){
-            callback.onTweetsLoaded(new ArrayList<>(mCachedTweets.values()));
-            return;
-        }
-
-        if(mCacheIsDirty){
-            getTweetsFromRemoteDataSource(callback);
+    public void getTweets(String maxId, String sinceId,
+                          @NonNull final LoadTweetsCallback callback) {
+        Log.d(TAG,hasInternet + " checking internet status in tweets repo");
+        if(hasInternet){
+            Log.d(TAG,"calling remote data source");
+            getTweetsFromRemoteDataSource(maxId,sinceId,callback);
         }else{
-            mTweetsLocalDataSource.getMoreTweets(new LoadTweetsCallback() {
-                @Override
-                public void onTweetsLoaded(List<Tweet> tweets) {
-                    refreshCache(tweets);
-                    callback.onTweetsLoaded(new ArrayList<>(tweets));
-                }
-
-                @Override
-                public void onDataNotAvailable() {
-                    getTweetsFromRemoteDataSource(callback);
-                }
-            });
+            Log.d(TAG,"calling local data source");
+            getTweetsFromLocalDataSource(callback);
         }
     }
 
-    @Override
-    public void getMoreTweets(String maxId, String sinceId, @NonNull final LoadTweetsCallback callback) {
-        mTweetsRemoteDataSource.getMoreTweets(maxId, sinceId, new LoadTweetsCallback() {
+    private void getTweetsFromLocalDataSource(@NonNull final LoadTweetsCallback callback){
+        mTweetsLocalDataSource.getTweets(null,null,new LoadTweetsCallback() {
             @Override
             public void onTweetsLoaded(List<Tweet> tweets) {
-                Log.d(TAG, "Loading more tweets : " + tweets);
+                Log.d(TAG,"OnTweetsLoaded from local data source" + tweets);
+                callback.onTweetsLoaded(tweets);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                Log.d(TAG,"OnTweetsNot loaded from local data source");
+                callback.onDataNotAvailable();
+            }
+        });
+    }
+
+    private void getTweetsFromRemoteDataSource(String maxId, String sinceId,
+                                              @NonNull final LoadTweetsCallback callback){
+        mTweetsRemoteDataSource.getTweets(maxId, sinceId, new LoadTweetsCallback() {
+            @Override
+            public void onTweetsLoaded(List<Tweet> tweets) {
+                ++count;
+                Log.d(TAG,"TweetsFromRemoteDatasource: count - " + count + ", tweets " + tweets );
                 callback.onTweetsLoaded(new ArrayList<>(tweets));
+                refreshLocalDatabase(tweets);
             }
 
             @Override
@@ -90,44 +93,12 @@ public class TweetsRepository implements TweetsDataSource {
         });
     }
 
-    private void getTweetsFromRemoteDataSource(@NonNull final LoadTweetsCallback callback) {
-        mTweetsRemoteDataSource.getMoreTweets(new LoadTweetsCallback() {
-            @Override
-            public void onTweetsLoaded(List<Tweet> tweets) {
-                Log.d(TAG,"Getting tweets from remote source : " + tweets);
-                refreshCache(tweets);
-                refreshLocalDatabase(tweets);
-                callback.onTweetsLoaded(new ArrayList<>(tweets));
-            }
-
-
-
-            @Override
-            public void onDataNotAvailable() {
-                Log.d(TAG,"Loading data for first time failed");
-                callback.onDataNotAvailable();
-            }
-        });
-    }
 
     private void refreshLocalDatabase(List<Tweet> tweets) {
         mTweetsLocalDataSource.deleteAllTweets();
         for(Tweet tweet: tweets){
             mTweetsLocalDataSource.saveTweet(tweet);
         }
-    }
-
-    private void refreshCache(List<Tweet> tweets) {
-        if(mCachedTweets == null){
-            mCachedTweets = new LinkedHashMap<>();
-        }
-
-        mCachedTweets.clear();
-        for(Tweet tweet: tweets){
-            mCachedTweets.put(tweet.getIdStr(),tweet);
-        }
-
-        mCacheIsDirty = false;
     }
 
     @Override
@@ -138,13 +109,6 @@ public class TweetsRepository implements TweetsDataSource {
     @Override
     public void deleteAllTweets() {
         mTweetsLocalDataSource.deleteAllTweets();
-
-        if(mCachedTweets == null){
-            mCachedTweets = new LinkedHashMap<>();
-        }
-
-        mCachedTweets.clear();
-
     }
 
     @Override
@@ -169,7 +133,18 @@ public class TweetsRepository implements TweetsDataSource {
 
     @Override
     public void refreshTweets() {
-        mCacheIsDirty = true;
+        Log.d(TAG,"calling delete all tweets");
+        mTweetsLocalDataSource.deleteAllTweets();
+    }
+
+    @Override
+    public void saveAllTweets(List<Tweet> tweets) {
+        mTweetsLocalDataSource.saveAllTweets(tweets);
+    }
+
+    @Override
+    public void internetStatus(boolean hasInternet) {
+        this.hasInternet = hasInternet;
     }
 
 
