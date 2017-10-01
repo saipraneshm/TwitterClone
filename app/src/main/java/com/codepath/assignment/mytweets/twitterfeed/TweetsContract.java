@@ -1,5 +1,7 @@
 package com.codepath.assignment.mytweets.twitterfeed;
 
+import android.content.Intent;
+
 import com.codepath.assignment.mytweets.BasePresenter;
 import com.codepath.assignment.mytweets.BaseView;
 import com.codepath.assignment.mytweets.model.Tweet;
@@ -18,7 +20,7 @@ public interface TweetsContract {
 
         void showTweets(List<Tweet> tweets);
 
-        void showComposeTweetDialog();
+        void showComposeTweetDialog(int requestCode, String tag);
 
         void showLoadingTweetsError();
 
@@ -32,6 +34,8 @@ public interface TweetsContract {
 
         void showMoreTweets(List<Tweet> tweets);
 
+        void postNewTweetToTimeline(Tweet tweet);
+
 
     }
 
@@ -39,7 +43,7 @@ public interface TweetsContract {
     interface Presenter extends BasePresenter {
 
 
-        void result(int requestCode, int resultCode);
+        void result(int requestCode, int resultCode, Intent data);
 
         void loadTweets(boolean forceUpdate);
 

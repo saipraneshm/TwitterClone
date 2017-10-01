@@ -64,7 +64,7 @@ public class TwitterFeedFragment extends VisibleFragment implements TweetsContra
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mPresenter.result(requestCode,resultCode);
+        mPresenter.result(requestCode,resultCode,data);
     }
 
     @Override
@@ -113,6 +113,8 @@ public class TwitterFeedFragment extends VisibleFragment implements TweetsContra
         return mTwitterFeedBinding.getRoot();
     }
 
+
+
     @Override
     public void setPresenter(TweetsContract.Presenter presenter) {
         if(presenter != null)
@@ -130,12 +132,12 @@ public class TwitterFeedFragment extends VisibleFragment implements TweetsContra
     }
 
     @Override
-    public void showComposeTweetDialog() {
+    public void showComposeTweetDialog(int requestCode, String tag) {
 
         Log.d(TAG, "composing new tweet dialog");
         ComposeTweetDialog tweetDialog = new ComposeTweetDialog();
-        tweetDialog.setTargetFragment(TwitterFeedFragment.this, 300);
-        tweetDialog.show(getFragmentManager(), "compose_tweet");
+        tweetDialog.setTargetFragment(TwitterFeedFragment.this, requestCode);
+        tweetDialog.show(getFragmentManager(),tag);
     }
 
     @Override
@@ -169,6 +171,12 @@ public class TwitterFeedFragment extends VisibleFragment implements TweetsContra
     public void showMoreTweets(List<Tweet> tweets) {
         mTweets.addAll(tweets);
         mAdapter.appendTweets(tweets);
+    }
+
+    @Override
+    public void postNewTweetToTimeline(Tweet tweet) {
+        mTweets.addFirst(tweet);
+        mAdapter.addToFirst(tweet);
     }
 
 }

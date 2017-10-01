@@ -34,7 +34,7 @@ public interface TweetsDataSource {
 
     void saveTweet(Tweet tweet);
 
-    Tweet postTweet(String tweetMessage);
+    void postTweet(String tweetMessage, GetTweetCallback callback);
 
     void refreshTweets();
 

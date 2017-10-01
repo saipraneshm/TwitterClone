@@ -108,8 +108,8 @@ public class TweetsLocalDataSource implements TweetsDataSource {
     }
 
     @Override
-    public Tweet postTweet(String tweetMessage) {
-        return null;
+    public void postTweet(String tweetMessage, GetTweetCallback callback) {
+
     }
 
     @Override

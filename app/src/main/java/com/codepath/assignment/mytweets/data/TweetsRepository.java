@@ -3,6 +3,7 @@ package com.codepath.assignment.mytweets.data;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.codepath.assignment.mytweets.data.remote.TweetsRemoteDataSource;
 import com.codepath.assignment.mytweets.model.Tweet;
 
 import java.util.ArrayList;
@@ -152,17 +153,18 @@ public class TweetsRepository implements TweetsDataSource {
     }
 
     @Override
-    public Tweet postTweet(String tweetMessage) {
-       Tweet tweet = mTweetsRemoteDataSource.postTweet(tweetMessage);
-        if(tweet == null) return null;
-       mTweetsLocalDataSource.saveTweet(tweet);
+    public void postTweet(String tweetMessage, final GetTweetCallback callback) {
+        mTweetsRemoteDataSource.postTweet(tweetMessage, new GetTweetCallback() {
+            @Override
+            public void onTweetLoaded(Tweet tweet) {
+                callback.onTweetLoaded(tweet);
+            }
 
-        if(mCachedTweets == null){
-            mCachedTweets = new LinkedHashMap<>();
-        }
-
-        mCachedTweets.put(tweet.getIdStr(),tweet);
-       return tweet;
+            @Override
+            public void onDataNotAvailable() {
+                callback.onDataNotAvailable();
+            }
+        });
     }
 
     @Override

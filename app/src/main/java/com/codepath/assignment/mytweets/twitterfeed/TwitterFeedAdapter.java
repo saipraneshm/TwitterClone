@@ -97,6 +97,7 @@ public class TwitterFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         public void bind(Tweet tweet){
+
             Glide.with(mContext)
                     .load(tweet.getUser().getProfileImageUrl().replace("normal","bigger"))
                     .asBitmap()

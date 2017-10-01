@@ -1,7 +1,9 @@
 package com.codepath.assignment.mytweets.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -25,6 +27,8 @@ import com.codepath.assignment.mytweets.databinding.DialogComposeTweetBinding;
 public class ComposeTweetDialog extends DialogFragment {
 
 
+    public static final String EXTRA_SAVE_AS_DRAFT = "EXTRA_SAVE_AS_DRAFT";
+    public static final String EXTRA_TWEET_MESSAGE = "EXTRA_TWEET_MESSAGE";
     private DialogComposeTweetBinding mComposeTweetBinding;
 
     private boolean valuesChanged = false;
@@ -54,7 +58,11 @@ public class ComposeTweetDialog extends DialogFragment {
         mComposeTweetBinding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dismiss();
+                if(shouldAskForDialog()){
+                    showSaveDraftDialog();
+                }else{
+                    dismiss();
+                }
             }
         });
 
@@ -83,6 +91,14 @@ public class ComposeTweetDialog extends DialogFragment {
             }
         });
 
+        mComposeTweetBinding.btnSendTweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendResult(false);
+                dismiss();
+            }
+        });
+
     }
 
     @Nullable
@@ -107,16 +123,26 @@ public class ComposeTweetDialog extends DialogFragment {
                 .setPositiveButton(R.string.save_message, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        sendResult(true);
                         dismiss();
                     }
                 }).setNegativeButton(R.string.delete_message, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
-                        if(dialog != null)
-                            dialog.dismiss();
+                        dismiss();
                     }
                 });
 
          dialog.create().show();
+    }
+
+    private void sendResult(boolean saveAsDraft){
+        if(getTargetFragment() == null) return;
+
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_SAVE_AS_DRAFT, saveAsDraft);
+        intent.putExtra(EXTRA_TWEET_MESSAGE, mComposeTweetBinding.etTweetBody.getText() + "");
+
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
     }
 }

@@ -134,21 +134,22 @@ public class TweetsRemoteDataSource implements TweetsDataSource {
     }
 
     @Override
-    public Tweet postTweet(String tweetMessage) {
-        postedTweet = new Tweet();
+    public void postTweet(String tweetMessage, final GetTweetCallback callback) {
+        postedTweet = null;
         final Call<Tweet> response = mTwitterClient.postResponse(tweetMessage);
         response.enqueue(new Callback<Tweet>() {
             @Override
             public void onResponse(Call<Tweet> call, Response<Tweet> response) {
                 postedTweet = response.body();
+                callback.onTweetLoaded(postedTweet);
+                Log.d(TAG,"on post response " + response.body());
             }
 
             @Override
-            public void onFailure(Call<Tweet> call, Throwable t) {
-                postedTweet = null;
+            public void onFailure(Call<Tweet> call, Throwable t) {callback.onDataNotAvailable();
             }
         });
-        return postedTweet;
+
     }
 
     @Override

@@ -1,10 +1,13 @@
 package com.codepath.assignment.mytweets.twitterfeed;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.codepath.assignment.mytweets.data.TweetsDataSource;
 import com.codepath.assignment.mytweets.data.TweetsRepository;
+import com.codepath.assignment.mytweets.fragment.ComposeTweetDialog;
 import com.codepath.assignment.mytweets.model.Tweet;
 
 import java.util.List;
@@ -19,6 +22,9 @@ public class TweetsPresenter implements TweetsContract.Presenter {
     private final TweetsContract.View mTweetsView;
     private boolean mFirstLoad = true;
     private static final String TAG = TweetsRepository.class.getSimpleName();
+
+    private static final String REQUEST_COMPOSE_TWEET = "requestComposeTweet";
+    private static final int COMPOSE_TWEET_REQUEST_CODE = 200;
 
 
     public TweetsPresenter(@NonNull TweetsRepository tweetsRepository,
@@ -37,7 +43,27 @@ public class TweetsPresenter implements TweetsContract.Presenter {
     }
 
     @Override
-    public void result(int requestCode, int resultCode) {
+    public void result(int requestCode, int resultCode, Intent data) {
+        if(resultCode != Activity.RESULT_OK) return;
+
+        if(requestCode == COMPOSE_TWEET_REQUEST_CODE && data != null){
+            String message = data.getStringExtra(ComposeTweetDialog.EXTRA_TWEET_MESSAGE);
+            boolean saveAsDraft = data.getBooleanExtra(ComposeTweetDialog.EXTRA_SAVE_AS_DRAFT,false);
+            if(!saveAsDraft){
+
+                mTweetsRepository.postTweet(message, new TweetsDataSource.GetTweetCallback() {
+                    @Override
+                    public void onTweetLoaded(Tweet tweet) {
+                        mTweetsView.postNewTweetToTimeline(tweet);
+                    }
+
+                    @Override
+                    public void onDataNotAvailable() {
+                        mTweetsView.showNoTweets();
+                    }
+                });
+            }
+        }
 
     }
 
@@ -134,6 +160,6 @@ public class TweetsPresenter implements TweetsContract.Presenter {
 
     @Override
     public void composeNewTweet() {
-        mTweetsView.showComposeTweetDialog();
+        mTweetsView.showComposeTweetDialog(COMPOSE_TWEET_REQUEST_CODE,REQUEST_COMPOSE_TWEET);
     }
 }
