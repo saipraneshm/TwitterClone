@@ -39,11 +39,13 @@ public class TwitterFeedActivity extends SingleFragmentActivity {
         super.onCreate(savedInstanceState);
 
 
-        getBinding().btnCreate.setOnClickListener(new View.OnClickListener() {
+        ((ActivityContainerBinding)getBinding()).btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mTweetsPresenter.composeNewTweet();
             }
         });
+
+
     }
 }

@@ -1,5 +1,7 @@
 package com.codepath.assignment.mytweets.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.format.DateUtils;
 import android.util.Log;
 
@@ -12,12 +14,14 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 @Table(database = TweetsDatabase.class)
-public class Tweet extends BaseModel {
+public class Tweet extends BaseModel implements Parcelable {
 
         @SerializedName("truncated")
         @Expose
@@ -27,7 +31,6 @@ public class Tweet extends BaseModel {
         @SerializedName("created_at")
         @Expose
         private String createdAt;
-
 
         @SerializedName("favorited")
         @Expose
@@ -102,6 +105,7 @@ public class Tweet extends BaseModel {
         @Expose
         private Entities entities;
 
+        @Column
         @SerializedName("favorite_count")
         @Expose
         private Integer favoriteCount;
@@ -270,6 +274,7 @@ public class Tweet extends BaseModel {
         public String getRelativeTimeAgo(){
             String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
             SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+
             sf.setLenient(true);
 
             String relativeDate = "";
@@ -286,6 +291,24 @@ public class Tweet extends BaseModel {
             return relativeDate;
         }
 
+        public String getDetailScreenTimeFormat(){
+            String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+            SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+            DateFormat targetFormat = new SimpleDateFormat("h:mm a - d MMM yy",Locale.ENGLISH);
+            sf.setLenient(true);
+            String formatedDate = "";
+            try {
+                Date date = sf.parse(createdAt);
+                formatedDate = targetFormat.format(date);
+
+                Log.d("REALTIVEDATE",  formatedDate);
+                return formatedDate;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return formatedDate;
+        }
+
 
     @Override
     public String toString() {
@@ -296,4 +319,44 @@ public class Tweet extends BaseModel {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.createdAt);
+        dest.writeString(this.idStr);
+        dest.writeString(this.text);
+        dest.writeValue(this.id);
+        dest.writeValue(this.retweetCount);
+        dest.writeParcelable(this.user, flags);
+        dest.writeValue(this.favoriteCount);
+    }
+
+    public Tweet() {
+    }
+
+    protected Tweet(Parcel in) {
+        this.createdAt = in.readString();
+        this.idStr = in.readString();
+        this.text = in.readString();
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.retweetCount = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.user = in.readParcelable(User.class.getClassLoader());
+        this.favoriteCount = (Integer) in.readValue(Integer.class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<Tweet> CREATOR = new Parcelable.Creator<Tweet>() {
+        @Override
+        public Tweet createFromParcel(Parcel source) {
+            return new Tweet(source);
+        }
+
+        @Override
+        public Tweet[] newArray(int size) {
+            return new Tweet[size];
+        }
+    };
 }

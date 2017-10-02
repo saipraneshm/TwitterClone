@@ -86,6 +86,10 @@ public class TwitterFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         notifyItemInserted(0);
     }
 
+    public Tweet getTweet(int position) {
+        return mTweets.get(position);
+    }
+
 
     private class TwitterFeedViewHolder extends RecyclerView.ViewHolder{
 

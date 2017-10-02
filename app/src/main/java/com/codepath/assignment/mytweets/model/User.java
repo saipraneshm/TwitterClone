@@ -1,5 +1,8 @@
 package com.codepath.assignment.mytweets.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.codepath.assignment.mytweets.data.local.TweetsDatabase;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,7 +12,7 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 @Table(database = TweetsDatabase.class)
-public class User extends BaseModel {
+public class User extends BaseModel implements Parcelable {
 
     @Column
     @SerializedName("name")
@@ -493,4 +496,44 @@ public class User extends BaseModel {
                 ", screenName='" + screenName + '\'' +
                 '}';
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.createdAt);
+        dest.writeString(this.idStr);
+        dest.writeString(this.name);
+        dest.writeString(this.profileImageUrl);
+        dest.writeValue(this.id);
+        dest.writeString(this.screenName);
+    }
+
+    public User() {
+    }
+
+    protected User(Parcel in) {
+        this.createdAt = in.readString();
+        this.idStr = in.readString();
+        this.name = in.readString();
+        this.profileImageUrl = in.readString();
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.screenName = in.readString();
+    }
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel source) {
+            return new User(source);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }

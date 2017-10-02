@@ -38,4 +38,6 @@ Curabitur blandit diam vel dui posuere pulvinar. Curabitur pretium feugiat nulla
     <string name="save_message">SAVE</string>
     <string name="no_internet_dialog_title">No Internet</string>
     <string name="no_internet_dialog_message">Not connected to internet</string>
+    <string name="published_time">12.11 PM - 01 Oct 17</string>
+    <string name="tweet_detail_toolbar_title">Tweet</string>
 </resources>

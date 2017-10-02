@@ -24,8 +24,10 @@ import com.codepath.assignment.mytweets.fragment.ComposeTweetDialog;
 import com.codepath.assignment.mytweets.fragment.abs.VisibleFragment;
 import com.codepath.assignment.mytweets.model.Tweet;
 import com.codepath.assignment.mytweets.receiver.ConnectivityBroadcastReceiver;
+import com.codepath.assignment.mytweets.twitterdetailscreen.TwitterDetailActivity;
 import com.codepath.assignment.mytweets.util.AppUtils;
 import com.codepath.assignment.mytweets.util.EndlessRecyclerViewScrollListener;
+import com.codepath.assignment.mytweets.util.ItemClickSupport;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -133,6 +135,14 @@ public class TwitterFeedFragment extends VisibleFragment implements TweetsContra
         mTwitterFeedBinding.rvTwitterFeed.addOnScrollListener(mScrollListener);
         mTwitterFeedBinding.rvTwitterFeed.addItemDecoration(itemDecoration);
 
+        ItemClickSupport.addTo(mTwitterFeedBinding.rvTwitterFeed).setOnItemClickListener(
+                new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                mPresenter.showTweetDetailScreen(mAdapter.getTweet(position));
+            }
+        });
+
         mTwitterFeedBinding.swipeContainer.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -228,6 +238,11 @@ public class TwitterFeedFragment extends VisibleFragment implements TweetsContra
     public void postNewTweetToTimeline(Tweet tweet) {
         mAdapter.addToFirst(tweet);
         mTwitterFeedBinding.rvTwitterFeed.smoothScrollToPosition(0);
+    }
+
+    @Override
+    public void showTweetDetailScreen(Tweet tweet) {
+        startActivity(TwitterDetailActivity.newIntent(getActivity(),tweet));
     }
 
 }

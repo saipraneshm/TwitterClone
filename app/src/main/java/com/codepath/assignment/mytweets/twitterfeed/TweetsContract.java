@@ -36,6 +36,8 @@ public interface TweetsContract {
 
         void postNewTweetToTimeline(Tweet tweet);
 
+        void showTweetDetailScreen(Tweet tweet);
+
 
     }
 
@@ -54,6 +56,8 @@ public interface TweetsContract {
         void internetStatus(boolean hasInternet);
 
         void saveTweets(List<Tweet> tweets);
+
+        void showTweetDetailScreen(Tweet tweet);
 
     }
 }

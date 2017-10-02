@@ -146,4 +146,9 @@ public class TweetsPresenter implements TweetsContract.Presenter {
     public void saveTweets(List<Tweet> tweets) {
         mTweetsRepository.saveAllTweets(tweets);
     }
+
+    @Override
+    public void showTweetDetailScreen(Tweet tweet) {
+        mTweetsView.showTweetDetailScreen(tweet);
+    }
 }
