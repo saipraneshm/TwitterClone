@@ -3,6 +3,7 @@ package com.codepath.assignment.mytweets.data;
 import android.support.annotation.NonNull;
 
 import com.codepath.assignment.mytweets.model.Tweet;
+import com.codepath.assignment.mytweets.model.TweetMessage;
 
 import java.util.List;
 
@@ -23,6 +24,11 @@ public interface TweetsDataSource {
         void onDataNotAvailable();
     }
 
+    interface GetTweetMessageCallback{
+        void onTweetMessageLoaded(List<TweetMessage> tweetMessage);
+        void onDataNotAvailable();
+    }
+
 
     void getTweets(String maxId, String sinceId, @NonNull LoadTweetsCallback callback);
 
@@ -39,6 +45,10 @@ public interface TweetsDataSource {
     void saveAllTweets(List<Tweet> tweets);
 
     void internetStatus(boolean hasInternet);
+
+    void storeTweetMessage(String userId, String message);
+
+    void getTweetMessage(String userId, @NonNull GetTweetMessageCallback callback);
 
 
 }

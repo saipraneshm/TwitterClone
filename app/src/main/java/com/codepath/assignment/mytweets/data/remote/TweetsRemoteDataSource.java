@@ -136,4 +136,14 @@ public class TweetsRemoteDataSource implements TweetsDataSource {
     public void internetStatus(boolean hasInternet) {
 
     }
+
+    @Override
+    public void storeTweetMessage(String userId, String message) {
+
+    }
+
+    @Override
+    public void getTweetMessage(String userId, @NonNull GetTweetMessageCallback callback) {
+
+    }
 }

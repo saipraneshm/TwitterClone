@@ -10,8 +10,8 @@ import com.raizlabs.android.dbflow.annotation.Database;
 public class TweetsDatabase {
 
 
-    public static final String NAME = "TweetsDatabase";
+    public static final String NAME = "TweetsDatabaseUpdated";
 
-    public static final int VERSION = 5;
+    public static final int VERSION = 1;
 
 }

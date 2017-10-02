@@ -6,6 +6,8 @@ import android.util.Log;
 
 import com.codepath.assignment.mytweets.data.TweetsDataSource;
 import com.codepath.assignment.mytweets.model.Tweet;
+import com.codepath.assignment.mytweets.model.TweetMessage;
+import com.codepath.assignment.mytweets.model.TweetMessage_Table;
 import com.codepath.assignment.mytweets.model.Tweet_Table;
 import com.raizlabs.android.dbflow.config.DatabaseDefinition;
 import com.raizlabs.android.dbflow.config.FlowManager;
@@ -170,5 +172,51 @@ public class TweetsLocalDataSource implements TweetsDataSource {
     @Override
     public void internetStatus(boolean hasInternet) {
 
+    }
+
+    @Override
+    public void storeTweetMessage(final String userId, final String message) {
+
+        DatabaseDefinition database = FlowManager.getDatabase(TweetsDatabase.class);
+        Transaction transaction = database.beginTransactionAsync(new ITransaction() {
+            @Override
+            public void execute(DatabaseWrapper databaseWrapper) {
+                TweetMessage tweetMessage = new TweetMessage();
+                tweetMessage.setMessage(message);
+                tweetMessage.setUserId(userId);
+                tweetMessage.save();
+            }
+        }).success(new Transaction.Success() {
+            @Override
+            public void onSuccess(@NonNull Transaction transaction) {
+                Log.d(TAG,"TweetMessage Saved successfully");
+            }
+        }).error(new Transaction.Error() {
+            @Override
+            public void onError(@NonNull Transaction transaction, @NonNull Throwable error) {
+                Log.e(TAG,"TweetMessage Couldn't be saved" ,error);
+            }
+        }).build();
+
+        transaction.execute(); // execute
+    }
+
+    @Override
+    public void getTweetMessage(String userId, @NonNull final GetTweetMessageCallback callback) {
+        SQLite.select()
+                .from(TweetMessage.class)
+                .where(TweetMessage_Table.userId.is(userId))
+                .async()
+                .queryListResultCallback(new QueryTransaction.QueryResultListCallback<TweetMessage>() {
+                    @Override
+                    public void onListQueryResult(QueryTransaction transaction,
+                                                  @NonNull List<TweetMessage> tResult) {
+                        if(tResult.size() == 0){
+                            callback.onDataNotAvailable();
+                        }else{
+                            callback.onTweetMessageLoaded(tResult);
+                        }
+                    }
+                });
     }
 }

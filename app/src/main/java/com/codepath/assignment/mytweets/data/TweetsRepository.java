@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.codepath.assignment.mytweets.model.Tweet;
+import com.codepath.assignment.mytweets.model.TweetMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,6 +146,26 @@ public class TweetsRepository implements TweetsDataSource {
     @Override
     public void internetStatus(boolean hasInternet) {
         this.hasInternet = hasInternet;
+    }
+
+    @Override
+    public void storeTweetMessage(String userId, String message) {
+        mTweetsLocalDataSource.storeTweetMessage(userId,message);
+    }
+
+    @Override
+    public void getTweetMessage(String userId, @NonNull final GetTweetMessageCallback callback) {
+        mTweetsLocalDataSource.getTweetMessage(userId, new GetTweetMessageCallback() {
+            @Override
+            public void onTweetMessageLoaded(List<TweetMessage> tweetMessage) {
+                callback.onTweetMessageLoaded(tweetMessage);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                callback.onDataNotAvailable();
+            }
+        });
     }
 
 

@@ -9,6 +9,8 @@ import com.codepath.assignment.mytweets.data.TweetsDataSource;
 import com.codepath.assignment.mytweets.data.TweetsRepository;
 import com.codepath.assignment.mytweets.fragment.ComposeTweetDialog;
 import com.codepath.assignment.mytweets.model.Tweet;
+import com.codepath.assignment.mytweets.util.QueryPreferences;
+import com.twitter.sdk.android.core.TwitterCore;
 
 import java.util.List;
 
@@ -65,6 +67,13 @@ public class TweetsPresenter implements TweetsContract.Presenter {
                         mTweetsView.showNoTweets();
                     }
                 });
+            }else{
+                String userId = String.valueOf(TwitterCore.getInstance()
+                        .getSessionManager()
+                        .getActiveSession()
+                        .getUserId());
+                Log.d(TAG,"Storing message: " + message + " for " + userId);
+                mTweetsRepository.storeTweetMessage(userId,message);
             }
         }
 

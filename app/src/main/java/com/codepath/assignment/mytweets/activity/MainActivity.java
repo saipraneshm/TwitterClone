@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.codepath.assignment.mytweets.R;
 import com.codepath.assignment.mytweets.twitterfeed.TwitterFeedActivity;
+import com.codepath.assignment.mytweets.util.QueryPreferences;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterCore;
@@ -20,23 +21,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     TwitterLoginButton mLoginButton;
+    private TwitterSession mTwitterSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mLoginButton = (TwitterLoginButton) findViewById(R.id.btnTwitterLogin);
-
-        TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
-
-        if(session != null){
+        mTwitterSession= TwitterCore.getInstance().getSessionManager().getActiveSession();
+        if(mTwitterSession != null){
             startActivity(TwitterFeedActivity.getIntent(MainActivity.this));
+            finish();
         }
 
         mLoginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
                 startActivity(TwitterFeedActivity.getIntent(MainActivity.this));
+                finish();
             }
 
             @Override

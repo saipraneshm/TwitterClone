@@ -12,6 +12,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import com.codepath.assignment.mytweets.databinding.DialogComposeTweetBinding;
 public class ComposeTweetDialog extends DialogFragment {
 
 
+    private static final String TAG = ComposeTweetDialog.class.getSimpleName();
     public static final String EXTRA_SAVE_AS_DRAFT = "EXTRA_SAVE_AS_DRAFT";
     public static final String EXTRA_TWEET_MESSAGE = "EXTRA_TWEET_MESSAGE";
     private DialogComposeTweetBinding mComposeTweetBinding;
@@ -113,7 +115,8 @@ public class ComposeTweetDialog extends DialogFragment {
     }
 
     private boolean shouldAskForDialog(){
-        return mComposeTweetBinding.tvCharCount.getText().length() != 0;
+        //Log.d(TAG,"character count: " + mComposeTweetBinding.tvCharCount.getText().toString().length());
+        return (mComposeTweetBinding.etTweetBody.getText().length() > 0);
     }
 
     private void showSaveDraftDialog(){
