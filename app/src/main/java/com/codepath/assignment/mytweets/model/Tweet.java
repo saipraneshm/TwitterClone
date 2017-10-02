@@ -88,6 +88,7 @@ public class Tweet extends BaseModel implements Parcelable {
         @Expose
         private String source;
 
+        @PrimaryKey
         @Column
         @ForeignKey(saveForeignKeyModel = true)
         @SerializedName("user")
@@ -101,9 +102,7 @@ public class Tweet extends BaseModel implements Parcelable {
         @Expose
         private Object inReplyToStatusId;
 
-        @SerializedName("entities")
-        @Expose
-        private Entities entities;
+
 
         @Column
         @SerializedName("favorite_count")
@@ -118,14 +117,6 @@ public class Tweet extends BaseModel implements Parcelable {
         public void setFavoriteCount(Integer favoriteCount) {
             this.favoriteCount = favoriteCount;
         }
-
-        public Entities getEntities() {
-                return entities;
-            }
-
-            public void setEntities(Entities entities) {
-                this.entities = entities;
-            }
 
         public Boolean getTruncated() {
                 return truncated;

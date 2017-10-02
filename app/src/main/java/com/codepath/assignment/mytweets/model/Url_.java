@@ -56,4 +56,13 @@ class Url_ {
         this.indices = indices;
     }
 
+    @Override
+    public String toString() {
+        return "Url_{" +
+                "url='" + url + '\'' +
+                ", expandedUrl='" + expandedUrl + '\'' +
+                ", displayUrl='" + displayUrl + '\'' +
+                ", indices=" + indices +
+                '}';
+    }
 }

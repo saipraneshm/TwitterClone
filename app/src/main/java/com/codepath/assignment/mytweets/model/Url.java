@@ -21,4 +21,11 @@ public class Url {
     public void setUrls(List<Url_> urls) {
         this.urls = urls;
     }
+
+    @Override
+    public String toString() {
+        return "Url{" +
+                "urls=" + urls +
+                '}';
+    }
 }

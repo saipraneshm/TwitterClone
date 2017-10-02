@@ -148,12 +148,24 @@ public class User extends BaseModel implements Parcelable {
     @Expose
     private String screenName;
 
+    @SerializedName("entities")
+    @Expose
+    private Entities entities;
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Entities getEntities() {
+        return entities;
+    }
+
+    public void setEntities(Entities entities) {
+        this.entities = entities;
     }
 
     public String getProfileSidebarFillColor() {
@@ -457,46 +469,12 @@ public class User extends BaseModel implements Parcelable {
     public String toString() {
         return "User{" +
                 "name='" + name + '\'' +
-                ", profileSidebarFillColor='" + profileSidebarFillColor + '\'' +
-                ", profileBackgroundTile=" + profileBackgroundTile +
-                ", profileSidebarBorderColor='" + profileSidebarBorderColor + '\'' +
-                ", profileImageUrl='" + profileImageUrl + '\'' +
                 ", createdAt='" + createdAt + '\'' +
-                ", location='" + location + '\'' +
-                ", followRequestSent=" + followRequestSent +
                 ", idStr='" + idStr + '\'' +
-                ", isTranslator=" + isTranslator +
-                ", profileLinkColor='" + profileLinkColor + '\'' +
-                ", defaultProfile=" + defaultProfile +
                 ", url='" + url + '\'' +
-                ", contributorsEnabled=" + contributorsEnabled +
-                ", favouritesCount=" + favouritesCount +
-                ", utcOffset=" + utcOffset +
-                ", profileImageUrlHttps='" + profileImageUrlHttps + '\'' +
-                ", id=" + id +
-                ", listedCount=" + listedCount +
-                ", profileUseBackgroundImage=" + profileUseBackgroundImage +
-                ", profileTextColor='" + profileTextColor + '\'' +
-                ", followersCount=" + followersCount +
-                ", lang='" + lang + '\'' +
-                ", _protected=" + _protected +
-                ", geoEnabled=" + geoEnabled +
-                ", notifications=" + notifications +
-                ", description='" + description + '\'' +
-                ", profileBackgroundColor='" + profileBackgroundColor + '\'' +
-                ", verified=" + verified +
-                ", timeZone=" + timeZone +
-                ", profileBackgroundImageUrlHttps='" + profileBackgroundImageUrlHttps + '\'' +
-                ", statusesCount=" + statusesCount +
-                ", profileBackgroundImageUrl='" + profileBackgroundImageUrl + '\'' +
-                ", defaultProfileImage=" + defaultProfileImage +
-                ", friendsCount=" + friendsCount +
-                ", following=" + following +
-                ", showAllInlineMedia=" + showAllInlineMedia +
-                ", screenName='" + screenName + '\'' +
+                ", entities=" + entities +
                 '}';
     }
-
 
     @Override
     public int describeContents() {

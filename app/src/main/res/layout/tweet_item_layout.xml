@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools">
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
     <RelativeLayout
         android:id="@+id/rlTweetItem"
         android:background="?attr/selectableItemBackground"
@@ -43,6 +44,24 @@
             android:linksClickable="true"
             android:layout_height="wrap_content"/>
 
+        <ImageView
+            android:id="@+id/ivEmbeddedImage"
+            android:layout_below="@id/tvTweetContent"
+            android:layout_toEndOf="@id/ivAvatar"
+            android:layout_margin="@dimen/margin_8"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="160dp"/>
+
+        <VideoView
+            android:id="@+id/vvEmbeddedVideo"
+            android:layout_below="@id/ivEmbeddedImage"
+            android:layout_toEndOf="@id/ivAvatar"
+            android:layout_margin="@dimen/margin_8"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"/>
+
         <TextView
             android:id="@+id/tvUserName"
             android:layout_width="wrap_content"
@@ -74,7 +93,7 @@
         <LinearLayout
             android:padding="@dimen/padding_8"
             android:layout_toEndOf="@id/ivAvatar"
-            android:layout_below="@id/tvTweetContent"
+            android:layout_below="@id/vvEmbeddedVideo"
             android:id="@+id/llTweetBtns"
             android:orientation="horizontal"
             android:layout_width="match_parent"

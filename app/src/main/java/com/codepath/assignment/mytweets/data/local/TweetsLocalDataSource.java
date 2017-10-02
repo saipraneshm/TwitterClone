@@ -126,19 +126,45 @@ public class TweetsLocalDataSource implements TweetsDataSource {
     }
 
     @Override
-    public void saveAllTweets(List<Tweet> tweets) {
-        FastStoreModelTransaction<Tweet> tweetFastStoreModelTransaction = FastStoreModelTransaction
+    public void saveAllTweets(final List<Tweet> tweets) {
+        /*FastStoreModelTransaction<Tweet> tweetFastStoreModelTransaction = FastStoreModelTransaction
                 .insertBuilder(FlowManager.getModelAdapter(Tweet.class))
                 .addAll(tweets)
                 .build();
 
         DatabaseDefinition database = FlowManager.getDatabase(TweetsDatabase.class);
         database.beginTransactionAsync(tweetFastStoreModelTransaction)
-                .build().execute();
+                .build().execute();*/
 
-        /*for(Tweet tweet : tweets){
-            saveTweet(tweet);
-        }*/
+        DatabaseDefinition database = FlowManager.getDatabase(TweetsDatabase.class);
+        Transaction transaction = database.beginTransactionAsync(new ITransaction() {
+            @Override
+            public void execute(DatabaseWrapper databaseWrapper) {
+                for(Tweet tweet : tweets){
+                    Tweet check = SQLite.select()
+                            .from(Tweet.class)
+                            .where(Tweet_Table.idStr.is(tweet.getIdStr())).querySingle();
+                    if(check == null){
+                        tweet.save();
+                    }else{
+                        tweet.delete();
+                        check.save();
+                    }
+                }
+            }
+        }).success(new Transaction.Success() {
+            @Override
+            public void onSuccess(@NonNull Transaction transaction) {
+                Log.d(TAG,"Tweets are Saved successfully");
+            }
+        }).error(new Transaction.Error() {
+            @Override
+            public void onError(@NonNull Transaction transaction, @NonNull Throwable error) {
+                Log.e(TAG,"Tweets Couldn't be saved" ,error);
+            }
+        }).build();
+
+        transaction.execute(); // execute
     }
 
     @Override

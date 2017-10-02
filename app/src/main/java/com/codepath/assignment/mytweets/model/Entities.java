@@ -31,4 +31,11 @@ class Entities {
     public void setDescription(Description description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "Entities{" +
+                "url=" + url +
+                '}';
+    }
 }

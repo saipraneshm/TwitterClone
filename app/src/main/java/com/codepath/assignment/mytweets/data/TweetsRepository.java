@@ -82,7 +82,7 @@ public class TweetsRepository implements TweetsDataSource {
                 ++count;
                 Log.d(TAG,"TweetsFromRemoteDatasource: count - " + count + ", tweets " + tweets );
                 callback.onTweetsLoaded(new ArrayList<>(tweets));
-                refreshLocalDatabase(tweets);
+                saveAllTweets(tweets);
             }
 
             @Override
