@@ -6,14 +6,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
-        android:name=".application.TwitterApp"
+        android:name=".util.TwitterApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_twitter_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".login.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -26,11 +26,14 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|adjustPan">
         </activity>
-        <activity android:name=".twitterdetailscreen.TwitterDetailActivity"
+        <activity
+            android:name=".twitterdetailscreen.TwitterDetailActivity"
             android:parentActivityName=".twitterfeed.TwitterFeedActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".twitterfeed.TwitterFeedActivity"/>
+        </activity>
+        <activity android:name=".twittercompose.TwitterComposeActivity">
         </activity>
     </application>
 

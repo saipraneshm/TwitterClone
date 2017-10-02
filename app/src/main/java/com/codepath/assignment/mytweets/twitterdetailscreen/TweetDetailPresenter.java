@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.codepath.assignment.mytweets.data.TweetsRepository;
-import com.codepath.assignment.mytweets.model.Tweet;
+import com.codepath.assignment.mytweets.data.model.Tweet;
 
 /**
  * Created by saip92 on 10/1/2017.

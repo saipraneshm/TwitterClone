@@ -4,12 +4,11 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.codepath.assignment.mytweets.application.TwitterApp;
+import com.codepath.assignment.mytweets.util.TwitterApp;
 import com.codepath.assignment.mytweets.data.TweetsDataSource;
-import com.codepath.assignment.mytweets.model.Tweet;
-import com.codepath.assignment.mytweets.network.TwitterAPIClient;
+import com.codepath.assignment.mytweets.data.model.Tweet;
+import com.codepath.assignment.mytweets.util.network.TwitterAPIClient;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

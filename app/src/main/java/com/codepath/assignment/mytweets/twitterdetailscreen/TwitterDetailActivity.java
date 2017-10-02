@@ -2,28 +2,28 @@ package com.codepath.assignment.mytweets.twitterdetailscreen;
 
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 
-import com.codepath.assignment.mytweets.Injection;
+import com.codepath.assignment.mytweets.util.Injection;
 import com.codepath.assignment.mytweets.R;
-import com.codepath.assignment.mytweets.activity.abs.SingleFragmentActivity;
-import com.codepath.assignment.mytweets.model.Tweet;
+import com.codepath.assignment.mytweets.databinding.ActivityTwitterDetailBinding;
+import com.codepath.assignment.mytweets.util.ActivityUtils;
+import com.codepath.assignment.mytweets.util.activity.abs.SingleFragmentActivity;
+import com.codepath.assignment.mytweets.data.model.Tweet;
 
-public class TwitterDetailActivity extends SingleFragmentActivity {
+public class TwitterDetailActivity extends AppCompatActivity {
 
 
     private static final String EXTRA_TWEET = "EXTRA_TWEET";
 
     private TwitterDetailFragment mTwitterDetailFragment;
     private TweetDetailPresenter mTweetDetailPresenter;
+    private ActivityTwitterDetailBinding mBinding;
 
-    @Override
-    protected int getLayoutResId() {
-        return R.layout.activity_twitter_detail;
-    }
 
     public static Intent newIntent(Context context, Tweet tweet){
         Intent intent = new Intent(context, TwitterDetailActivity.class);
@@ -32,18 +32,23 @@ public class TwitterDetailActivity extends SingleFragmentActivity {
     }
 
     @Override
-    protected Fragment createFragment() {
-        return mTwitterDetailFragment;
-    }
-
-    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mBinding = DataBindingUtil.setContentView(this,R.layout.activity_twitter_detail);
         Tweet tweet = getIntent().getParcelableExtra(EXTRA_TWEET);
-        mTwitterDetailFragment = TwitterDetailFragment.newInstance(tweet);
+
+        FragmentManager fm = getSupportFragmentManager();
+        mTwitterDetailFragment =(TwitterDetailFragment)fm.findFragmentById(R.id.fragment_container);
+
+        if(mTwitterDetailFragment == null){
+            mTwitterDetailFragment = TwitterDetailFragment.newInstance(tweet);
+            ActivityUtils.addFragmentToActivity(fm,mTwitterDetailFragment,R.id.fragment_container);
+        }
+
         mTweetDetailPresenter = new TweetDetailPresenter(tweet,
                 Injection.provideTweetsRepository(),
                 mTwitterDetailFragment);
-        super.onCreate(savedInstanceState);
+
     }
 
     @Override

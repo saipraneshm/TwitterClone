@@ -1,7 +1,7 @@
-package com.codepath.assignment.mytweets.network;
+package com.codepath.assignment.mytweets.util.network;
 
 
-import com.codepath.assignment.mytweets.model.Tweet;
+import com.codepath.assignment.mytweets.data.model.Tweet;
 
 import java.util.List;
 import java.util.Map;

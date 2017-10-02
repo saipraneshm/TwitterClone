@@ -4,7 +4,7 @@ import android.content.Intent;
 
 import com.codepath.assignment.mytweets.BasePresenter;
 import com.codepath.assignment.mytweets.BaseView;
-import com.codepath.assignment.mytweets.model.Tweet;
+import com.codepath.assignment.mytweets.data.model.Tweet;
 
 import java.util.List;
 
@@ -37,6 +37,8 @@ public interface TweetsContract {
         void postNewTweetToTimeline(Tweet tweet);
 
         void showTweetDetailScreen(Tweet tweet);
+
+        void refreshTweets();
 
 
     }

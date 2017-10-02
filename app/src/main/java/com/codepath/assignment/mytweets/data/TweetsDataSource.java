@@ -2,8 +2,8 @@ package com.codepath.assignment.mytweets.data;
 
 import android.support.annotation.NonNull;
 
-import com.codepath.assignment.mytweets.model.Tweet;
-import com.codepath.assignment.mytweets.model.TweetMessage;
+import com.codepath.assignment.mytweets.data.model.Tweet;
+import com.codepath.assignment.mytweets.data.model.TweetMessage;
 
 import java.util.List;
 

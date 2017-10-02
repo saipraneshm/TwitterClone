@@ -19,7 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.codepath.assignment.mytweets.R;
 import com.codepath.assignment.mytweets.databinding.FragmentTwitterDetailBinding;
-import com.codepath.assignment.mytweets.model.Tweet;
+import com.codepath.assignment.mytweets.data.model.Tweet;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -1,4 +1,4 @@
-package com.codepath.assignment.mytweets.model;
+package com.codepath.assignment.mytweets.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

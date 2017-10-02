@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -15,7 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.codepath.assignment.mytweets.R;
 import com.codepath.assignment.mytweets.databinding.TweetItemLayoutBinding;
-import com.codepath.assignment.mytweets.model.Tweet;
+import com.codepath.assignment.mytweets.data.model.Tweet;
 
 import java.util.LinkedList;
 import java.util.List;

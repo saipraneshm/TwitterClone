@@ -2,7 +2,6 @@ package com.codepath.assignment.mytweets.twitterfeed;
 
 
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -20,10 +19,10 @@ import android.view.ViewGroup;
 
 import com.codepath.assignment.mytweets.R;
 import com.codepath.assignment.mytweets.databinding.FragmentTwitterFeedBinding;
-import com.codepath.assignment.mytweets.fragment.ComposeTweetDialog;
-import com.codepath.assignment.mytweets.fragment.abs.VisibleFragment;
-import com.codepath.assignment.mytweets.model.Tweet;
-import com.codepath.assignment.mytweets.receiver.ConnectivityBroadcastReceiver;
+import com.codepath.assignment.mytweets.util.fragment.ComposeTweetDialog;
+import com.codepath.assignment.mytweets.util.fragment.abs.VisibleFragment;
+import com.codepath.assignment.mytweets.data.model.Tweet;
+import com.codepath.assignment.mytweets.util.ConnectivityBroadcastReceiver;
 import com.codepath.assignment.mytweets.twitterdetailscreen.TwitterDetailActivity;
 import com.codepath.assignment.mytweets.util.AppUtils;
 import com.codepath.assignment.mytweets.util.EndlessRecyclerViewScrollListener;
@@ -58,6 +57,7 @@ public class TwitterFeedFragment extends VisibleFragment implements TweetsContra
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         mAdapter = new TwitterFeedAdapter(getActivity(),mTweets);
     }
 
@@ -243,6 +243,11 @@ public class TwitterFeedFragment extends VisibleFragment implements TweetsContra
     @Override
     public void showTweetDetailScreen(Tweet tweet) {
         startActivity(TwitterDetailActivity.newIntent(getActivity(),tweet));
+    }
+
+    @Override
+    public void refreshTweets() {
+        mAdapter.clear();
     }
 
 }

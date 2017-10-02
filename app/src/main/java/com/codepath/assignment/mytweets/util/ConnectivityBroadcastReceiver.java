@@ -1,4 +1,4 @@
-package com.codepath.assignment.mytweets.receiver;
+package com.codepath.assignment.mytweets.util;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

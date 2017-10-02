@@ -3,8 +3,8 @@ package com.codepath.assignment.mytweets.data;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.codepath.assignment.mytweets.model.Tweet;
-import com.codepath.assignment.mytweets.model.TweetMessage;
+import com.codepath.assignment.mytweets.data.model.Tweet;
+import com.codepath.assignment.mytweets.data.model.TweetMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,9 +96,12 @@ public class TweetsRepository implements TweetsDataSource {
 
 
     private void refreshLocalDatabase(List<Tweet> tweets) {
-        mTweetsLocalDataSource.deleteAllTweets();
-        for(Tweet tweet: tweets){
-            mTweetsLocalDataSource.saveTweet(tweet);
+        if(hasInternet){
+            mTweetsLocalDataSource.deleteAllTweets();
+
+            for(Tweet tweet: tweets){
+                mTweetsLocalDataSource.saveTweet(tweet);
+            }
         }
     }
 
@@ -134,8 +137,9 @@ public class TweetsRepository implements TweetsDataSource {
 
     @Override
     public void refreshTweets() {
-        Log.d(TAG,"calling delete all tweets");
-        mTweetsLocalDataSource.deleteAllTweets();
+        Log.d(TAG,"calling delete all tweets" + hasInternet);
+        if(hasInternet)
+            mTweetsLocalDataSource.deleteAllTweets();
     }
 
     @Override

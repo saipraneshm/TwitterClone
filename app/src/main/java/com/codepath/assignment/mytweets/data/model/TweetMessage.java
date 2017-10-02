@@ -1,4 +1,4 @@
-package com.codepath.assignment.mytweets.model;
+package com.codepath.assignment.mytweets.data.model;
 
 import com.codepath.assignment.mytweets.data.local.TweetsDatabase;
 import com.raizlabs.android.dbflow.annotation.Column;

@@ -1,4 +1,4 @@
-package com.codepath.assignment.mytweets.activity;
+package com.codepath.assignment.mytweets.login;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,14 +7,12 @@ import android.util.Log;
 
 import com.codepath.assignment.mytweets.R;
 import com.codepath.assignment.mytweets.twitterfeed.TwitterFeedActivity;
-import com.codepath.assignment.mytweets.util.QueryPreferences;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
-import com.twitter.sdk.android.core.internal.TwitterSessionVerifier;
 
 
 public class MainActivity extends AppCompatActivity {

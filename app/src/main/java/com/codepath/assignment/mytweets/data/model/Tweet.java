@@ -1,9 +1,8 @@
-package com.codepath.assignment.mytweets.model;
+package com.codepath.assignment.mytweets.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.format.DateUtils;
-import android.util.Log;
 
 import com.codepath.assignment.mytweets.data.local.TweetsDatabase;
 import com.google.gson.annotations.Expose;
@@ -274,7 +273,7 @@ public class Tweet extends BaseModel implements Parcelable {
                 relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
                         System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
                 String[] time = relativeDate.split(" ");
-                Log.d("REALTIVEDATE", time[0] + " " + time[1]);
+               // Log.d("REALTIVEDATE", time[0] + " " + time[1]);
                 return time[0] + time[1].charAt(0);
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -292,7 +291,7 @@ public class Tweet extends BaseModel implements Parcelable {
                 Date date = sf.parse(createdAt);
                 formatedDate = targetFormat.format(date);
 
-                Log.d("REALTIVEDATE",  formatedDate);
+             //   Log.d("REALTIVEDATE",  formatedDate);
                 return formatedDate;
             } catch (ParseException e) {
                 e.printStackTrace();

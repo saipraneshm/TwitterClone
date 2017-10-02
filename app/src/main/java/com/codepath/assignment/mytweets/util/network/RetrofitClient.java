@@ -1,4 +1,4 @@
-package com.codepath.assignment.mytweets.network;
+package com.codepath.assignment.mytweets.util.network;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;

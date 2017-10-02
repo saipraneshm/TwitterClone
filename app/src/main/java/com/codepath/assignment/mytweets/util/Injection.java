@@ -1,7 +1,5 @@
-package com.codepath.assignment.mytweets;
+package com.codepath.assignment.mytweets.util;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.codepath.assignment.mytweets.data.TweetsRepository;
 import com.codepath.assignment.mytweets.data.local.TweetsLocalDataSource;

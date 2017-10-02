@@ -1,9 +1,8 @@
-package com.codepath.assignment.mytweets.application;
+package com.codepath.assignment.mytweets.util;
 
 import android.app.Application;
-import android.content.Context;
 
-import com.codepath.assignment.mytweets.network.RetrofitClient;
+import com.codepath.assignment.mytweets.util.network.RetrofitClient;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowLog;
 import com.raizlabs.android.dbflow.config.FlowManager;

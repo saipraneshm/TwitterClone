@@ -7,9 +7,8 @@ import android.util.Log;
 
 import com.codepath.assignment.mytweets.data.TweetsDataSource;
 import com.codepath.assignment.mytweets.data.TweetsRepository;
-import com.codepath.assignment.mytweets.fragment.ComposeTweetDialog;
-import com.codepath.assignment.mytweets.model.Tweet;
-import com.codepath.assignment.mytweets.util.QueryPreferences;
+import com.codepath.assignment.mytweets.util.fragment.ComposeTweetDialog;
+import com.codepath.assignment.mytweets.data.model.Tweet;
 import com.twitter.sdk.android.core.TwitterCore;
 
 import java.util.List;
@@ -28,6 +27,7 @@ public class TweetsPresenter implements TweetsContract.Presenter {
     private static final String REQUEST_COMPOSE_TWEET = "requestComposeTweet";
     private static final int COMPOSE_TWEET_REQUEST_CODE = 200;
     private boolean hasInternet = true;
+    private static boolean loadOnce = true;
 
 
     public TweetsPresenter(@NonNull TweetsRepository tweetsRepository,
@@ -110,8 +110,19 @@ public class TweetsPresenter implements TweetsContract.Presenter {
                     mTweetsView.showNoTweets();
                 }else{
                     if(swipeToRefresh){
-                       // mTweetsRepository.refreshTweets();
-                        mTweetsView.showNewTweetsSinceLastLoad(tweets);
+                        Log.d(TAG,"hasInternet ->" + hasInternet + ",loadOnce -> " + loadOnce);
+                        if(!hasInternet){
+                            if(loadOnce){
+                                loadOnce = false;
+                                mTweetsView.refreshTweets();
+                                mTweetsView.showNewTweetsSinceLastLoad(tweets);
+                            }
+                        }else{
+                            mTweetsRepository.refreshTweets();
+                            mTweetsView.showNewTweetsSinceLastLoad(tweets);
+                        }
+
+
                     }
                     else{
                         mTweetsView.showMoreTweets(tweets);
@@ -147,6 +158,7 @@ public class TweetsPresenter implements TweetsContract.Presenter {
 
     @Override
     public void internetStatus(boolean hasInternet) {
+        if(hasInternet) loadOnce = true;
         this.hasInternet = hasInternet;
         mTweetsRepository.internetStatus(hasInternet);
     }

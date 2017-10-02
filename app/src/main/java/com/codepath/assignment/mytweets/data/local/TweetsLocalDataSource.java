@@ -5,16 +5,14 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.codepath.assignment.mytweets.data.TweetsDataSource;
-import com.codepath.assignment.mytweets.model.Tweet;
-import com.codepath.assignment.mytweets.model.TweetMessage;
-import com.codepath.assignment.mytweets.model.TweetMessage_Table;
-import com.codepath.assignment.mytweets.model.Tweet_Table;
+import com.codepath.assignment.mytweets.data.model.Tweet;
+import com.codepath.assignment.mytweets.data.model.TweetMessage;
+import com.codepath.assignment.mytweets.data.model.TweetMessage_Table;
+import com.codepath.assignment.mytweets.data.model.Tweet_Table;
 import com.raizlabs.android.dbflow.config.DatabaseDefinition;
 import com.raizlabs.android.dbflow.config.FlowManager;
-import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
-import com.raizlabs.android.dbflow.structure.database.transaction.FastStoreModelTransaction;
 import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
 import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransaction;
 import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
@@ -90,7 +88,20 @@ public class TweetsLocalDataSource implements TweetsDataSource {
 
     @Override
     public void deleteAllTweets() {
-        Delete.table(Tweet.class);
+        SQLite.delete(Tweet.class)
+                .async()
+                .success(new Transaction.Success() {
+                    @Override
+                    public void onSuccess(@NonNull Transaction transaction) {
+                        Log.d(TAG,"Tweets deleted from database");
+                    }
+                }).error(new Transaction.Error() {
+                    @Override
+                    public void onError(@NonNull Transaction transaction, @NonNull Throwable error) {
+                        Log.d(TAG,"Tweets were not deleted from the database");
+                    }
+                })
+                .execute();
     }
 
     @Override
