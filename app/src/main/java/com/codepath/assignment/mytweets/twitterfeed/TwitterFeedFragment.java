@@ -19,14 +19,15 @@ import android.view.ViewGroup;
 
 import com.codepath.assignment.mytweets.R;
 import com.codepath.assignment.mytweets.databinding.FragmentTwitterFeedBinding;
-import com.codepath.assignment.mytweets.util.fragment.ComposeTweetDialog;
-import com.codepath.assignment.mytweets.util.fragment.abs.VisibleFragment;
+
 import com.codepath.assignment.mytweets.data.model.Tweet;
+import com.codepath.assignment.mytweets.util.ComposeTweetDialog;
 import com.codepath.assignment.mytweets.util.ConnectivityBroadcastReceiver;
 import com.codepath.assignment.mytweets.twitterdetailscreen.TwitterDetailActivity;
 import com.codepath.assignment.mytweets.util.AppUtils;
 import com.codepath.assignment.mytweets.util.EndlessRecyclerViewScrollListener;
 import com.codepath.assignment.mytweets.util.ItemClickSupport;
+import com.codepath.assignment.mytweets.util.VisibleFragment;
 
 import java.util.LinkedList;
 import java.util.List;
