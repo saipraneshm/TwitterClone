@@ -263,4 +263,9 @@ public class TweetsLocalDataSource implements TweetsDataSource {
     public void deleteTweetMessage(TweetMessage tweetMessage) {
         tweetMessage.delete();
     }
+
+    @Override
+    public void replyToTweetMessage(String tweetMessage, String userId) {
+
+    }
 }

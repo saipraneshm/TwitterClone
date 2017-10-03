@@ -15,12 +15,24 @@
             android:background="@android:color/transparent"
             android:id="@+id/toolbar"/>
 
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tvResponseUserName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/tw__TweetText.Quote"
+            tools:text="@string/in_response_to_tweet"
+            android:padding="@dimen/padding_4"
+            android:gravity="center"
+            android:drawableStart="@drawable/ic_arrow_downward_black_24px"
+            android:visibility="gone"
+            android:layout_below="@+id/toolbar"
+            android:layout_alignEnd="@+id/etTweetBody"/>
 
         <android.support.v7.widget.AppCompatEditText
             android:id="@+id/etTweetBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/toolbar"
+            android:layout_below="@id/tvResponseUserName"
             android:maxLines="8"
             android:minLines="8"
             android:padding="@dimen/margin_8"

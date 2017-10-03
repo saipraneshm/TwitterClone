@@ -27,4 +27,7 @@ public interface TwitterAPIClient {
     @GET("statuses/home_timeline.json")
     Call<List<Tweet>> getResponse(@QueryMap Map<String, String> queryParams);
 
+    @POST("statuses/update.json")
+    Call<Tweet> postTweetReply(@Query("status") String body, @Query("in_reply_to_status_id")String userId);
+
 }

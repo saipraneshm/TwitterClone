@@ -1,9 +1,11 @@
 package com.codepath.assignment.mytweets.tweetdetailscreen;
 
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -18,6 +20,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.codepath.assignment.mytweets.R;
+import com.codepath.assignment.mytweets.composetweet.dialog.DialogComposeTweet;
 import com.codepath.assignment.mytweets.databinding.FragmentTwitterDetailBinding;
 import com.codepath.assignment.mytweets.data.model.Tweet;
 
@@ -75,8 +78,12 @@ public class TwitterDetailFragment extends Fragment implements TweetDetailContra
         mTwitterDetailBinding = DataBindingUtil
                 .inflate(inflater,R.layout.fragment_twitter_detail,container,false);
 
-        ((AppCompatActivity)getActivity()).setSupportActionBar(mTwitterDetailBinding.toolbar);
-
+        mTwitterDetailBinding.imgBtnReTweet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.replyToTweet();
+            }
+        });
         mPresenter.start();
         // Inflate the layout for this fragment
         return mTwitterDetailBinding.getRoot();
@@ -90,6 +97,10 @@ public class TwitterDetailFragment extends Fragment implements TweetDetailContra
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mPresenter.sendResult(requestCode,resultCode,data);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -162,5 +173,19 @@ public class TwitterDetailFragment extends Fragment implements TweetDetailContra
     @Override
     public boolean isActive() {
         return isAdded();
+    }
+
+    @Override
+    public void showResponseToTweetSnackBar() {
+        Snackbar snackbar = Snackbar.make(mTwitterDetailBinding.getRoot(),R.string.replied_to_tweet_successful,
+                Snackbar.LENGTH_SHORT);
+        snackbar.show();
+    }
+
+    @Override
+    public void showReplyTweetDialog(int requestCode, String tag) {
+        DialogComposeTweet composeTweet = DialogComposeTweet.newInstance(mTweet);
+        composeTweet.setTargetFragment(this,requestCode);
+        composeTweet.show(getFragmentManager(),tag);
     }
 }

@@ -52,5 +52,7 @@ public interface TweetsDataSource {
 
     void deleteTweetMessage(TweetMessage message);
 
+    void replyToTweetMessage(String tweetMessage, String userId);
+
 
 }

@@ -151,4 +151,21 @@ public class TweetsRemoteDataSource implements TweetsDataSource {
     public void deleteTweetMessage(TweetMessage message) {
 
     }
+
+    @Override
+    public void replyToTweetMessage(String tweetMessage, String userId) {
+        Log.d(TAG,"tweetMessage: " + tweetMessage + ", userID: "+ userId);
+       Call<Tweet> response=  mTwitterClient.postTweetReply(tweetMessage,userId);
+        response.enqueue(new Callback<Tweet>() {
+            @Override
+            public void onResponse(Call<Tweet> call, Response<Tweet> response) {
+                Log.d(TAG, "Got response after responding to tweet: " + response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Tweet> call, Throwable t) {
+                Log.e(TAG,"Couldn't post the tweet ",t);
+            }
+        });
+    }
 }

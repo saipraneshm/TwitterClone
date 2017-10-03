@@ -8,19 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_alignParentTop="true"
-            app:elevation="@dimen/default_elevation"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:navigationIcon="@drawable/ic_arrow_back_white_24px"
-            style="@style/Base.Widget.AppCompat.Light.ActionBar"
-            app:title="@string/tweet_detail_toolbar_title"
-            />
 
         <ImageView
-            android:layout_below="@id/toolbar"
+            android:layout_alignParentTop="true"
             android:id="@+id/ivAvatar"
             android:layout_marginStart="@dimen/margin_8"
             android:layout_marginEnd="@dimen/margin_8"

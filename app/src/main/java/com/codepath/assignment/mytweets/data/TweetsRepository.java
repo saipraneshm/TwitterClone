@@ -180,5 +180,10 @@ public class TweetsRepository implements TweetsDataSource {
         mTweetsLocalDataSource.deleteTweetMessage(tweetMessage);
     }
 
+    @Override
+    public void replyToTweetMessage(String tweetMessage, String userId) {
+        mTweetsRemoteDataSource.replyToTweetMessage(tweetMessage,userId);
+    }
+
 
 }

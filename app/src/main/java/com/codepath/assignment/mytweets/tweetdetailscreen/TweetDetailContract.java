@@ -1,5 +1,7 @@
 package com.codepath.assignment.mytweets.tweetdetailscreen;
 
+import android.content.Intent;
+
 import com.codepath.assignment.mytweets.BasePresenter;
 import com.codepath.assignment.mytweets.BaseView;
 
@@ -32,12 +34,18 @@ public interface TweetDetailContract {
 
         boolean isActive();
 
+        void showResponseToTweetSnackBar();
+
+        void showReplyTweetDialog(int requestCode, String tag);
+
 
     }
 
     interface Presenter extends BasePresenter{
 
+        void sendResult(int requestCode, int resultCode, Intent data);
 
+        void replyToTweet();
 
     }
 }

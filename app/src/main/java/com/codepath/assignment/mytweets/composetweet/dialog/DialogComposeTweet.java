@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,6 +23,7 @@ import android.view.WindowManager;
 import com.codepath.assignment.mytweets.R;
 import com.codepath.assignment.mytweets.data.TweetsDataSource;
 import com.codepath.assignment.mytweets.data.TweetsRepository;
+import com.codepath.assignment.mytweets.data.model.Tweet;
 import com.codepath.assignment.mytweets.data.model.TweetMessage;
 import com.codepath.assignment.mytweets.databinding.FragmentComposeTweetBinding;
 import com.codepath.assignment.mytweets.util.Injection;
@@ -44,8 +43,11 @@ public class DialogComposeTweet extends DialogFragment {
     public static final String EXTRA_SAVE_AS_DRAFT = "EXTRA_SAVE_AS_DRAFT";
     public static final String EXTRA_TWEET_MESSAGE = "EXTRA_TWEET_MESSAGE";
     private static final int REQUEST_DRAFT_SCREEN_DIALOG = 252;
+    private static final String ARGS_TWEET_MESSAGE = "ARGS_TWEET_MESSAGE";
+    public static final String EXTRA_RESPONSE_USER_ID = "EXTRA_RESPONSE_USER_ID";
     private FragmentComposeTweetBinding mComposeTweetBinding;
     private List<TweetMessage> mTweetMessages = null;
+    private Tweet mResponseTweet;
     private String mUserId;
 
     TweetsRepository mTweetsRepository;
@@ -53,9 +55,18 @@ public class DialogComposeTweet extends DialogFragment {
     private MenuItem draftItem;
     private MenuItem showProfileItem;
 
-    private boolean valuesChanged = false;
+    private boolean isResponseToTweet = false;
 
     private static final int MAX_TWEETS_CHAR = 140;
+
+    public static DialogComposeTweet newInstance(Tweet tweet){
+        Bundle args = new Bundle();
+        args.putParcelable(ARGS_TWEET_MESSAGE, tweet);
+
+        DialogComposeTweet composeTweet = new DialogComposeTweet();
+        composeTweet.setArguments(args);
+        return composeTweet;
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -75,6 +86,13 @@ public class DialogComposeTweet extends DialogFragment {
                 .getSessionManager()
                 .getActiveSession()
                 .getUserId());
+
+        if(getArguments() != null){
+            isResponseToTweet = true;
+            mResponseTweet = getArguments().getParcelable(ARGS_TWEET_MESSAGE);
+        }else{
+            isResponseToTweet = false;
+        }
     }
 
     @Override
@@ -83,10 +101,16 @@ public class DialogComposeTweet extends DialogFragment {
             getDialog().getWindow()
                     .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         super.onViewCreated(view, savedInstanceState);
+        if(isResponseToTweet){
+            updateResponseTweetUI();
+        }else{
+            updateComposeTweetUI();
+        }
 
-        updateUI();
 
     }
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -103,7 +127,39 @@ public class DialogComposeTweet extends DialogFragment {
         }
     }
 
-    private void updateUI() {
+    private void updateComposeTweetUI() {
+        initializeUI();
+        mTweetsRepository.getTweetMessage(mUserId, new TweetsDataSource.GetTweetMessageCallback() {
+            @Override
+            public void onTweetMessageLoaded(List<TweetMessage> tweetMessage) {
+                mTweetMessages = tweetMessage;
+                Log.d(TAG,tweetMessage + " " + "PLEASE CHECK THIS");
+                showOrHideDraftMenuIcon();
+            }
+            @Override
+            public void onDataNotAvailable() {
+                mTweetMessages = null;
+                Log.d(TAG,"No tweet messages to show " );
+                showOrHideDraftMenuIcon();
+            }
+        });
+
+    }
+
+
+    private void updateResponseTweetUI() {
+        initializeUI();
+        showOrHideDraftMenuIcon();
+        mComposeTweetBinding.etTweetBody.setHint(R.string.reply_tweet_hint);
+        mComposeTweetBinding.btnSendTweet.setText(R.string.reply_to_tweet_btn);
+        mComposeTweetBinding.tvResponseUserName.setVisibility(View.VISIBLE);
+        mComposeTweetBinding.tvResponseUserName.setText(getString(R.string.response_tweet,
+                String.format("@%s", mResponseTweet.getUser().getScreenName())));
+
+    }
+
+
+    private void initializeUI(){
         mComposeTweetBinding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,23 +224,6 @@ public class DialogComposeTweet extends DialogFragment {
         Menu menu = mComposeTweetBinding.toolbar.getMenu();
         draftItem = menu.findItem(R.id.action_show_drafts);
         showProfileItem = menu.findItem(R.id.action_show_user_profile);
-       // showOrHideDraftMenuIcon();
-        Log.d(TAG,"fetching tweetMessages from the database");
-        mTweetsRepository.getTweetMessage(mUserId, new TweetsDataSource.GetTweetMessageCallback() {
-            @Override
-            public void onTweetMessageLoaded(List<TweetMessage> tweetMessage) {
-                mTweetMessages = tweetMessage;
-                Log.d(TAG,tweetMessage + " " + "PLEASE CHECK THIS");
-                showOrHideDraftMenuIcon();
-            }
-            @Override
-            public void onDataNotAvailable() {
-                mTweetMessages = null;
-                Log.d(TAG,"No tweet messages to show " );
-                showOrHideDraftMenuIcon();
-            }
-        });
-
     }
 
     private void showDraftsDialog() {
@@ -243,6 +282,8 @@ public class DialogComposeTweet extends DialogFragment {
         Intent intent = new Intent();
         intent.putExtra(EXTRA_SAVE_AS_DRAFT, saveAsDraft);
         intent.putExtra(EXTRA_TWEET_MESSAGE, mComposeTweetBinding.etTweetBody.getText() + "");
+        if(mResponseTweet != null)
+            intent.putExtra(EXTRA_RESPONSE_USER_ID,  mResponseTweet.getIdStr());
 
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
     }

@@ -34,6 +34,7 @@ public class TwitterDetailActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this,R.layout.activity_twitter_detail);
+        setSupportActionBar(mBinding.toolbar);
         Tweet tweet = getIntent().getParcelableExtra(EXTRA_TWEET);
 
         FragmentManager fm = getSupportFragmentManager();

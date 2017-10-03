@@ -4,13 +4,43 @@
         xmlns:tools="http://schemas.android.com/tools"
         tools:context="com.codepath.assignment.mytweets.tweetdetailscreen.TwitterDetailActivity">
 
-    <FrameLayout
-
-        android:id="@id/fragment_container"
+    <LinearLayout
+        android:id="@+id/llTwitterDetail"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
-    </FrameLayout>
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/clDraftMessages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                />
+
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.v7.widget.Toolbar
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:id="@+id/toolbar"
+                    app:navigationIcon="@drawable/ic_arrow_back_white_24px"
+                    app:elevation="@dimen/default_elevation"
+                    app:title="@string/tweet_detail_toolbar_title"
+                    style="@style/Base.Widget.AppCompat.Light.ActionBar"
+                    />
+            </android.support.design.widget.AppBarLayout>
+        </android.support.design.widget.CoordinatorLayout>
+
+
+
+
+
+    </LinearLayout>
 </layout>
 
