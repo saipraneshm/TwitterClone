@@ -79,7 +79,7 @@ public class DialogComposeTweet extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(STYLE_NO_FRAME, R.style.Theme_AppCompat_Light_DarkActionBar);
+        setStyle(STYLE_NO_FRAME, R.style.AppTheme);
         mTweetsRepository = Injection.provideTweetsRepository();
         mUserId = String.valueOf(TwitterCore
                 .getInstance()
@@ -281,9 +281,16 @@ public class DialogComposeTweet extends DialogFragment {
 
         Intent intent = new Intent();
         intent.putExtra(EXTRA_SAVE_AS_DRAFT, saveAsDraft);
-        intent.putExtra(EXTRA_TWEET_MESSAGE, mComposeTweetBinding.etTweetBody.getText() + "");
-        if(mResponseTweet != null)
+
+        if(mResponseTweet != null){
             intent.putExtra(EXTRA_RESPONSE_USER_ID,  mResponseTweet.getIdStr());
+            intent.putExtra(EXTRA_TWEET_MESSAGE,
+                    String.format("@%s", mResponseTweet.getUser().getScreenName()) + ": " +
+                            mComposeTweetBinding.etTweetBody.getText());
+        }else{
+            intent.putExtra(EXTRA_TWEET_MESSAGE, mComposeTweetBinding.etTweetBody.getText() + "");
+        }
+
 
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
     }

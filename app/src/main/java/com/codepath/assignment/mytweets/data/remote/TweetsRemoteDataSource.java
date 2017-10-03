@@ -10,6 +10,7 @@ import com.codepath.assignment.mytweets.data.TweetsDataSource;
 import com.codepath.assignment.mytweets.data.model.Tweet;
 import com.codepath.assignment.mytweets.util.network.TwitterAPIClient;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -159,7 +160,15 @@ public class TweetsRemoteDataSource implements TweetsDataSource {
         response.enqueue(new Callback<Tweet>() {
             @Override
             public void onResponse(Call<Tweet> call, Response<Tweet> response) {
-                Log.d(TAG, "Got response after responding to tweet: " + response.body());
+                Log.d(TAG, "Got response after responding to tweet: " + response.body()
+                + ",  " + response.code());
+                if(response.errorBody() != null){
+                    try {
+                        Log.d(TAG,response.errorBody().string() + " ");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
 
             @Override

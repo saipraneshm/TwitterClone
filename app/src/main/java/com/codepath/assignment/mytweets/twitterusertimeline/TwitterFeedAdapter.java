@@ -101,29 +101,32 @@ public class TwitterFeedAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         public void bind(Tweet tweet){
 
-            Glide.with(mContext)
-                    .load(tweet.getUser().getProfileImageUrl().replace("normal","bigger"))
-                    .asBitmap()
-                    .centerCrop()
-                    .into(new BitmapImageViewTarget(binding.ivAvatar){
-                        @Override
-                        protected void setResource(Bitmap resource) {
-                            RoundedBitmapDrawable circularBitmap
-                                    = RoundedBitmapDrawableFactory.create(mContext.getResources(),resource);
-                            circularBitmap.setCircular(true);
-                            binding.ivAvatar.setImageDrawable(circularBitmap);
-                        }
-                    });
+            if(tweet != null){
+                Glide.with(mContext)
+                        .load(tweet.getUser().getProfileImageUrl().replace("normal","bigger"))
+                        .asBitmap()
+                        .centerCrop()
+                        .into(new BitmapImageViewTarget(binding.ivAvatar){
+                            @Override
+                            protected void setResource(Bitmap resource) {
+                                RoundedBitmapDrawable circularBitmap
+                                        = RoundedBitmapDrawableFactory.create(mContext.getResources(),resource);
+                                circularBitmap.setCircular(true);
+                                binding.ivAvatar.setImageDrawable(circularBitmap);
+                            }
+                        });
 
-            binding.tvUserName.setText(String.format("@%s", tweet.getUser().getScreenName()));
-            binding.tvName.setText(tweet.getUser().getName());
-            binding.imgBtnLike.setText(String.valueOf(tweet.getFavoriteCount()));
-            binding.imgBtnReTweet.setText(String.valueOf(tweet.getRetweetCount()));
-            binding.tvTweetTime.setText(tweet.getRelativeTimeAgo());
-            //Log.d("REALTIVEDATE",tweet.getRelativeTimeAgo());
-         //   binding.imgBtnComments.setText(tweet.getUser().getStatusesCount());
-            binding.tvTweetContent.setText(tweet.getText());
-            binding.executePendingBindings();
+                binding.tvUserName.setText(String.format("@%s", tweet.getUser().getScreenName()));
+                binding.tvName.setText(tweet.getUser().getName());
+                binding.imgBtnLike.setText(String.valueOf(tweet.getFavoriteCount()));
+                binding.imgBtnReTweet.setText(String.valueOf(tweet.getRetweetCount()));
+                binding.tvTweetTime.setText(tweet.getRelativeTimeAgo());
+                //Log.d("REALTIVEDATE",tweet.getRelativeTimeAgo());
+                //   binding.imgBtnComments.setText(tweet.getUser().getStatusesCount());
+                binding.tvTweetContent.setText(tweet.getText());
+                binding.executePendingBindings();
+            }
+
         }
     }
 

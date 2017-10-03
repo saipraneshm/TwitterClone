@@ -3,6 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="colorPrimaryDark">@color/colorGray</item>
+        <item name="colorPrimary">@color/colorWhite</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
@@ -18,5 +20,5 @@
     </style>
 
 
-
+    <color name="colorGray">#9E9E9E</color>
 </resources>

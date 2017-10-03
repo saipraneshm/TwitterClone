@@ -23,6 +23,7 @@ import com.codepath.assignment.mytweets.R;
 import com.codepath.assignment.mytweets.composetweet.dialog.DialogComposeTweet;
 import com.codepath.assignment.mytweets.databinding.FragmentTwitterDetailBinding;
 import com.codepath.assignment.mytweets.data.model.Tweet;
+import com.codepath.assignment.mytweets.util.ThemedSnackBar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -177,9 +178,13 @@ public class TwitterDetailFragment extends Fragment implements TweetDetailContra
 
     @Override
     public void showResponseToTweetSnackBar() {
-        Snackbar snackbar = Snackbar.make(mTwitterDetailBinding.getRoot(),R.string.replied_to_tweet_successful,
-                Snackbar.LENGTH_SHORT);
-        snackbar.show();
+        /*Snackbar snackbar = Snackbar.make(mTwitterDetailBinding.getRoot(),R.string.replied_to_tweet_successful,
+                Snackbar.LENGTH_SHORT);*/
+        ThemedSnackBar.make(mTwitterDetailBinding.getRoot(),
+                R.string.replied_to_tweet_successful,
+                Snackbar.LENGTH_SHORT)
+                .show();
+        //snackbar.show();
     }
 
     @Override
