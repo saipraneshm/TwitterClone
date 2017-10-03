@@ -41,4 +41,8 @@ Curabitur blandit diam vel dui posuere pulvinar. Curabitur pretium feugiat nulla
     <string name="published_time">12.11 PM - 01 Oct 17</string>
     <string name="tweet_detail_toolbar_title">Tweet</string>
     <string name="action_logout">Logout</string>
+    <string name="show_draft_messages">Draft Messages</string>
+    <string name="show_user_profile">UserProfile</string>
+    <string name="drafts_title">Drafts</string>
+    <string name="draft_message">Draft Messages</string>
 </resources>

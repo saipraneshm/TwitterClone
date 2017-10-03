@@ -1,4 +1,4 @@
-package com.codepath.assignment.mytweets.util;
+package com.codepath.assignment.mytweets.composetweet.dialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,27 +9,48 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatCheckBox;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.codepath.assignment.mytweets.R;
+import com.codepath.assignment.mytweets.data.TweetsDataSource;
+import com.codepath.assignment.mytweets.data.TweetsRepository;
+import com.codepath.assignment.mytweets.data.model.TweetMessage;
 import com.codepath.assignment.mytweets.databinding.FragmentComposeTweetBinding;
+import com.codepath.assignment.mytweets.util.Injection;
+import com.twitter.sdk.android.core.TwitterCore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by saip92 on 9/30/2017.
  */
 
-public class ComposeTweetDialog extends DialogFragment {
+public class DialogComposeTweet extends DialogFragment {
 
 
-    private static final String TAG = ComposeTweetDialog.class.getSimpleName();
+    private static final String TAG = DialogComposeTweet.class.getSimpleName();
     public static final String EXTRA_SAVE_AS_DRAFT = "EXTRA_SAVE_AS_DRAFT";
     public static final String EXTRA_TWEET_MESSAGE = "EXTRA_TWEET_MESSAGE";
     private FragmentComposeTweetBinding mComposeTweetBinding;
+    private List<TweetMessage> mTweetMessages = null;
+    private String mUserId;
+
+    TweetsRepository mTweetsRepository;
+
+    private MenuItem draftItem;
+    private MenuItem showProfileItem;
 
     private boolean valuesChanged = false;
 
@@ -40,21 +61,33 @@ public class ComposeTweetDialog extends DialogFragment {
         super.onActivityCreated(savedInstanceState);
         if(getDialog().getWindow() != null)
             getDialog().getWindow()
-                    .getAttributes().windowAnimations = R.style.DialogAnimation;
+                    .getAttributes().windowAnimations = R.style.DialogAnimationUpAndDown;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setStyle(STYLE_NO_FRAME, R.style.AppTheme);
-
+        setStyle(STYLE_NO_FRAME, R.style.Theme_AppCompat_Light_DarkActionBar);
+        mTweetsRepository = Injection.provideTweetsRepository();
+        mUserId = String.valueOf(TwitterCore
+                .getInstance()
+                .getSessionManager()
+                .getActiveSession()
+                .getUserId());
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        if(getDialog().getWindow() != null)
+            getDialog().getWindow()
+                    .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         super.onViewCreated(view, savedInstanceState);
 
+        updateUI();
+
+    }
+
+    private void updateUI() {
         mComposeTweetBinding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,8 +110,8 @@ public class ComposeTweetDialog extends DialogFragment {
                 int currentCount = MAX_TWEETS_CHAR - charSequence.length();
                 mComposeTweetBinding.tvCharCount.setText(String.valueOf(currentCount));
                 mComposeTweetBinding.tvCharCount.setTextColor(ContextCompat.getColor(getActivity(),
-                                currentCount < 0 ? android.R.color.holo_red_dark
-                                        : android.R.color.darker_gray));
+                        currentCount < 0 ? android.R.color.holo_red_dark
+                                : android.R.color.darker_gray));
                 if(currentCount< 0)
                     mComposeTweetBinding.btnSendTweet.setEnabled(false);
                 else
@@ -99,6 +132,57 @@ public class ComposeTweetDialog extends DialogFragment {
             }
         });
 
+        mComposeTweetBinding.toolbar.inflateMenu(R.menu.menu_compose_dialog);
+        mComposeTweetBinding.toolbar.setOnMenuItemClickListener
+                (new Toolbar.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int itemId = item.getItemId();
+
+                        switch(itemId){
+                            case R.id.action_show_drafts:
+                                showDraftsDialog();
+                                break;
+                            case R.id.action_show_user_profile:
+                                break;
+                        }
+                        return true;
+                    }
+                });
+        Menu menu = mComposeTweetBinding.toolbar.getMenu();
+        draftItem = menu.findItem(R.id.action_show_drafts);
+        showProfileItem = menu.findItem(R.id.action_show_user_profile);
+       // showOrHideDraftMenuIcon();
+        Log.d(TAG,"fetching tweetMessages from the database");
+        mTweetsRepository.getTweetMessage(mUserId, new TweetsDataSource.GetTweetMessageCallback() {
+            @Override
+            public void onTweetMessageLoaded(List<TweetMessage> tweetMessage) {
+                mTweetMessages = tweetMessage;
+                Log.d(TAG,tweetMessage + " " + "PLEASE CHECK THIS");
+                showOrHideDraftMenuIcon();
+            }
+            @Override
+            public void onDataNotAvailable() {
+                mTweetMessages = null;
+                Log.d(TAG,"No tweet messages to show " );
+                showOrHideDraftMenuIcon();
+            }
+        });
+
+    }
+
+    private void showDraftsDialog() {
+        DialogDraftScreen dialogDraftScreen = DialogDraftScreen.newInstance
+                (new ArrayList<>(mTweetMessages));
+        dialogDraftScreen.show(getFragmentManager(),"DIALOG_DRAFTS_FRAGMENT");
+    }
+
+    private void showOrHideDraftMenuIcon() {
+        if(mTweetMessages != null && mTweetMessages.size()>0){
+            draftItem.setVisible(true);
+        }else{
+            draftItem.setVisible(false);
+        }
     }
 
     @Nullable

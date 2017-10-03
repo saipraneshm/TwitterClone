@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_show_drafts"
+        android:title="@string/show_draft_messages"
+        android:icon="@drawable/ic_twitter_social_icon_circle_white"
+        android:visible="true"
+        app:showAsAction="ifRoom"
+        />
+
+    <item
+        android:id="@+id/action_show_user_profile"
+        android:title="@string/show_user_profile"
+        android:icon="@mipmap/ic_twitter_launcher"
+        app:showAsAction="ifRoom"
+        />
+
+
+</menu>

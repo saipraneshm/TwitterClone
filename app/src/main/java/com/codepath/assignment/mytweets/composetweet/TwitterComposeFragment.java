@@ -93,7 +93,7 @@ public class TwitterComposeFragment extends Fragment implements ComposeTweetCont
         super.onActivityCreated(savedInstanceState);
         if(getActivity().getWindow() != null){
             getActivity().getWindow()
-                    .getAttributes().windowAnimations = R.style.DialogAnimation;
+                    .getAttributes().windowAnimations = R.style.DialogAnimationUpAndDown;
         }
     }
 

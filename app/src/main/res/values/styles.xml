@@ -7,9 +7,16 @@
     </style>
 
 
-    <style name="DialogAnimation">
+    <style name="DialogAnimationUpAndDown">
         <item name="android:windowEnterAnimation">@anim/dialog_slide_up</item>
         <item name="android:windowExitAnimation">@anim/dialog_slide_down</item>
     </style>
+
+    <style name="DialogAnimationLeftAndRight">
+        <item name="android:windowEnterAnimation">@anim/dialog_slide_in_left</item>
+        <item name="android:windowExitAnimation">@anim/dialog_slide_out_right</item>
+    </style>
+
+
 
 </resources>

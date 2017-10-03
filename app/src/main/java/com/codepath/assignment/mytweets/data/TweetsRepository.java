@@ -159,14 +159,17 @@ public class TweetsRepository implements TweetsDataSource {
 
     @Override
     public void getTweetMessage(String userId, @NonNull final GetTweetMessageCallback callback) {
+        Log.d(TAG,"Querying local database for tweet messages for user : " + userId);
         mTweetsLocalDataSource.getTweetMessage(userId, new GetTweetMessageCallback() {
             @Override
             public void onTweetMessageLoaded(List<TweetMessage> tweetMessage) {
+                Log.d(TAG,"got tweet messages: " + tweetMessage);
                 callback.onTweetMessageLoaded(tweetMessage);
             }
 
             @Override
             public void onDataNotAvailable() {
+                Log.d(TAG,"got no tweet messages: ");
                 callback.onDataNotAvailable();
             }
         });

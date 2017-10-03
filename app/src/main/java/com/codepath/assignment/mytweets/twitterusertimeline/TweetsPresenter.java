@@ -8,7 +8,7 @@ import android.util.Log;
 import com.codepath.assignment.mytweets.data.TweetsDataSource;
 import com.codepath.assignment.mytweets.data.TweetsRepository;
 import com.codepath.assignment.mytweets.data.model.Tweet;
-import com.codepath.assignment.mytweets.util.ComposeTweetDialog;
+import com.codepath.assignment.mytweets.composetweet.dialog.DialogComposeTweet;
 import com.twitter.sdk.android.core.TwitterCore;
 
 import java.util.List;
@@ -52,8 +52,8 @@ import java.util.List;
         if(resultCode != Activity.RESULT_OK) return;
 
         if(requestCode == COMPOSE_TWEET_REQUEST_CODE && data != null){
-            String message = data.getStringExtra(ComposeTweetDialog.EXTRA_TWEET_MESSAGE);
-            boolean saveAsDraft = data.getBooleanExtra(ComposeTweetDialog.EXTRA_SAVE_AS_DRAFT,false);
+            String message = data.getStringExtra(DialogComposeTweet.EXTRA_TWEET_MESSAGE);
+            boolean saveAsDraft = data.getBooleanExtra(DialogComposeTweet.EXTRA_SAVE_AS_DRAFT,false);
             if(!saveAsDraft){
 
                 mTweetsRepository.postTweet(message, new TweetsDataSource.GetTweetCallback() {

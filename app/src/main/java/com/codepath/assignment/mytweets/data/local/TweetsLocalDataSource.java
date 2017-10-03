@@ -195,6 +195,7 @@ public class TweetsLocalDataSource implements TweetsDataSource {
                 TweetMessage tweetMessage = new TweetMessage();
                 tweetMessage.setMessage(message);
                 tweetMessage.setUserId(userId);
+                Log.d(TAG,message + " " + userId);
                 tweetMessage.save();
             }
         }).success(new Transaction.Success() {
@@ -214,7 +215,7 @@ public class TweetsLocalDataSource implements TweetsDataSource {
 
     @Override
     public void getTweetMessage(String userId, @NonNull final GetTweetMessageCallback callback) {
-        SQLite.select()
+        /*SQLite.select()
                 .from(TweetMessage.class)
                 .where(TweetMessage_Table.userId.is(userId))
                 .async()
@@ -222,12 +223,37 @@ public class TweetsLocalDataSource implements TweetsDataSource {
                     @Override
                     public void onListQueryResult(QueryTransaction transaction,
                                                   @NonNull List<TweetMessage> tResult) {
+                        Log.d(TAG,tResult + " Got this from the database");
                         if(tResult.size() == 0){
                             callback.onDataNotAvailable();
                         }else{
                             callback.onTweetMessageLoaded(tResult);
                         }
                     }
-                });
+                }).success(new Transaction.Success() {
+            @Override
+            public void onSuccess(@NonNull Transaction transaction) {
+                Log.d(TAG,"successfull fetched tweet messages from the database");
+            }
+        }).error(new Transaction.Error() {
+            @Override
+            public void onError(@NonNull Transaction transaction, @NonNull Throwable error) {
+                Log.e(TAG,"unable to fetch messages from the database");
+            }
+        });*/
+
+        List<TweetMessage> messages = SQLite.select()
+                .from(TweetMessage.class)
+                .where(TweetMessage_Table.userId.is(userId))
+                .queryList();
+
+        if(messages.size() > 0){
+            callback.onTweetMessageLoaded(messages);
+        }else{
+            callback.onDataNotAvailable();
+        }
+
+        Log.d(TAG,"List of messages from db: " + messages);
+
     }
 }
