@@ -1,4 +1,4 @@
-package com.codepath.assignment.mytweets.twitterfeed;
+package com.codepath.assignment.mytweets.twitterusertimeline;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,8 +7,8 @@ import android.util.Log;
 
 import com.codepath.assignment.mytweets.data.TweetsDataSource;
 import com.codepath.assignment.mytweets.data.TweetsRepository;
-import com.codepath.assignment.mytweets.util.fragment.ComposeTweetDialog;
 import com.codepath.assignment.mytweets.data.model.Tweet;
+import com.codepath.assignment.mytweets.util.ComposeTweetDialog;
 import com.twitter.sdk.android.core.TwitterCore;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
  * Created by saip92 on 9/29/2017.
  */
 
-public class TweetsPresenter implements TweetsContract.Presenter {
+ class TweetsPresenter implements TweetsContract.Presenter {
 
     private final TweetsRepository mTweetsRepository;
     private final TweetsContract.View mTweetsView;
@@ -30,7 +30,7 @@ public class TweetsPresenter implements TweetsContract.Presenter {
     private static boolean loadOnce = true;
 
 
-    public TweetsPresenter(@NonNull TweetsRepository tweetsRepository,
+     TweetsPresenter(@NonNull TweetsRepository tweetsRepository,
                            @NonNull TweetsContract.View tweetsView){
         mTweetsRepository = tweetsRepository;
         mTweetsView = tweetsView;

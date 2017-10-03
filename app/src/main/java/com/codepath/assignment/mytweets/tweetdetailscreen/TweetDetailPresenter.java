@@ -1,4 +1,4 @@
-package com.codepath.assignment.mytweets.twitterdetailscreen;
+package com.codepath.assignment.mytweets.tweetdetailscreen;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,7 +10,7 @@ import com.codepath.assignment.mytweets.data.model.Tweet;
  * Created by saip92 on 10/1/2017.
  */
 
-public class TweetDetailPresenter implements TweetDetailContract.Presenter {
+ class TweetDetailPresenter implements TweetDetailContract.Presenter {
 
 
     private final TweetsRepository mTweetsRepository;
@@ -21,7 +21,7 @@ public class TweetDetailPresenter implements TweetDetailContract.Presenter {
     @Nullable
     private Tweet mTweet;
 
-    public TweetDetailPresenter(@Nullable Tweet tweet,
+     TweetDetailPresenter(@Nullable Tweet tweet,
                                 @NonNull TweetsRepository tweetsRepository,
                                 @NonNull TweetDetailContract.View tweetsDetailView){
         mTweet = tweet;

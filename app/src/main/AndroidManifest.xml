@@ -22,18 +22,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".twitterfeed.TwitterFeedActivity"
+            android:name=".twitterusertimeline.TwitterFeedActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|adjustPan">
         </activity>
         <activity
-            android:name=".twitterdetailscreen.TwitterDetailActivity"
-            android:parentActivityName=".twitterfeed.TwitterFeedActivity">
+            android:name=".tweetdetailscreen.TwitterDetailActivity"
+            android:parentActivityName=".twitterusertimeline.TwitterFeedActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".twitterfeed.TwitterFeedActivity"/>
+                android:value=".twitterusertimeline.TwitterFeedActivity"/>
         </activity>
-        <activity android:name=".twittercompose.TwitterComposeActivity">
+        <activity android:name=".composetweet.TwitterComposeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/plain"/>
+            </intent-filter>
         </activity>
     </application>
 

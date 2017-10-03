@@ -1,4 +1,4 @@
-package com.codepath.assignment.mytweets.twitterfeed;
+package com.codepath.assignment.mytweets.twitterusertimeline;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;

@@ -5,21 +5,19 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.codepath.assignment.mytweets.R;
-import com.codepath.assignment.mytweets.databinding.DialogComposeTweetBinding;
+import com.codepath.assignment.mytweets.databinding.FragmentComposeTweetBinding;
 
 /**
  * Created by saip92 on 9/30/2017.
@@ -31,7 +29,7 @@ public class ComposeTweetDialog extends DialogFragment {
     private static final String TAG = ComposeTweetDialog.class.getSimpleName();
     public static final String EXTRA_SAVE_AS_DRAFT = "EXTRA_SAVE_AS_DRAFT";
     public static final String EXTRA_TWEET_MESSAGE = "EXTRA_TWEET_MESSAGE";
-    private DialogComposeTweetBinding mComposeTweetBinding;
+    private FragmentComposeTweetBinding mComposeTweetBinding;
 
     private boolean valuesChanged = false;
 
@@ -110,12 +108,11 @@ public class ComposeTweetDialog extends DialogFragment {
                              @Nullable Bundle savedInstanceState) {
 
         mComposeTweetBinding = DataBindingUtil
-                .inflate(inflater,R.layout.dialog_compose_tweet,container,false);
+                .inflate(inflater,R.layout.fragment_compose_tweet,container,false);
         return mComposeTweetBinding.getRoot();
     }
 
     private boolean shouldAskForDialog(){
-        //Log.d(TAG,"character count: " + mComposeTweetBinding.tvCharCount.getText().toString().length());
         return (mComposeTweetBinding.etTweetBody.getText().length() > 0);
     }
 

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.codepath.assignment.mytweets.R;
-import com.codepath.assignment.mytweets.twitterfeed.TwitterFeedActivity;
+import com.codepath.assignment.mytweets.twitterusertimeline.TwitterFeedActivity;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterCore;

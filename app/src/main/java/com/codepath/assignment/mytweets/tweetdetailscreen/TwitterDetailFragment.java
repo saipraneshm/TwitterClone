@@ -1,4 +1,4 @@
-package com.codepath.assignment.mytweets.twitterdetailscreen;
+package com.codepath.assignment.mytweets.tweetdetailscreen;
 
 
 import android.databinding.DataBindingUtil;

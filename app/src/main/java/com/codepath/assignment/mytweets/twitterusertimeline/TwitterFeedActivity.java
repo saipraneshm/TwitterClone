@@ -1,4 +1,4 @@
-package com.codepath.assignment.mytweets.twitterfeed;
+package com.codepath.assignment.mytweets.twitterusertimeline;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +16,6 @@ import com.codepath.assignment.mytweets.util.Injection;
 import com.codepath.assignment.mytweets.R;
 import com.codepath.assignment.mytweets.util.ActivityUtils;
 import com.codepath.assignment.mytweets.login.MainActivity;
-import com.codepath.assignment.mytweets.util.activity.abs.SingleFragmentActivity;
 import com.codepath.assignment.mytweets.databinding.ActivityContainerBinding;
 import com.twitter.sdk.android.core.TwitterCore;
 

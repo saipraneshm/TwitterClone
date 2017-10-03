@@ -1,4 +1,4 @@
-package com.codepath.assignment.mytweets.twitterfeed;
+package com.codepath.assignment.mytweets.twitterusertimeline;
 
 
 import android.content.BroadcastReceiver;
@@ -18,12 +18,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.assignment.mytweets.R;
+import com.codepath.assignment.mytweets.composetweet.TwitterComposeActivity;
 import com.codepath.assignment.mytweets.databinding.FragmentTwitterFeedBinding;
 
 import com.codepath.assignment.mytweets.data.model.Tweet;
 import com.codepath.assignment.mytweets.util.ComposeTweetDialog;
 import com.codepath.assignment.mytweets.util.ConnectivityBroadcastReceiver;
-import com.codepath.assignment.mytweets.twitterdetailscreen.TwitterDetailActivity;
+import com.codepath.assignment.mytweets.tweetdetailscreen.TwitterDetailActivity;
 import com.codepath.assignment.mytweets.util.AppUtils;
 import com.codepath.assignment.mytweets.util.EndlessRecyclerViewScrollListener;
 import com.codepath.assignment.mytweets.util.ItemClickSupport;
@@ -201,6 +202,7 @@ public class TwitterFeedFragment extends VisibleFragment implements TweetsContra
         ComposeTweetDialog tweetDialog = new ComposeTweetDialog();
         tweetDialog.setTargetFragment(TwitterFeedFragment.this, requestCode);
         tweetDialog.show(getFragmentManager(),tag);
+        //startActivityForResult(new Intent(getActivity(), TwitterComposeActivity.class),requestCode);
     }
 
     @Override

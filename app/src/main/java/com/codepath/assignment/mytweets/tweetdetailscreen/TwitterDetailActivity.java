@@ -1,4 +1,4 @@
-package com.codepath.assignment.mytweets.twitterdetailscreen;
+package com.codepath.assignment.mytweets.tweetdetailscreen;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +12,6 @@ import com.codepath.assignment.mytweets.util.Injection;
 import com.codepath.assignment.mytweets.R;
 import com.codepath.assignment.mytweets.databinding.ActivityTwitterDetailBinding;
 import com.codepath.assignment.mytweets.util.ActivityUtils;
-import com.codepath.assignment.mytweets.util.activity.abs.SingleFragmentActivity;
 import com.codepath.assignment.mytweets.data.model.Tweet;
 
 public class TwitterDetailActivity extends AppCompatActivity {
