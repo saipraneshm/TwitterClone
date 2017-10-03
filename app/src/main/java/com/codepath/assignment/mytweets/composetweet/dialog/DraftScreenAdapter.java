@@ -46,6 +46,9 @@ public class DraftScreenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
 
+    public TweetMessage getTweetMessage(int position){
+        return mTweetMessages.get(position);
+    }
 
     private class DraftScreenViewHolder extends RecyclerView.ViewHolder{
 

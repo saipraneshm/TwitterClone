@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.codepath.assignment.mytweets.data.model.TweetMessage;
 import com.codepath.assignment.mytweets.util.TwitterApp;
 import com.codepath.assignment.mytweets.data.TweetsDataSource;
 import com.codepath.assignment.mytweets.data.model.Tweet;
@@ -143,6 +144,11 @@ public class TweetsRemoteDataSource implements TweetsDataSource {
 
     @Override
     public void getTweetMessage(String userId, @NonNull GetTweetMessageCallback callback) {
+
+    }
+
+    @Override
+    public void deleteTweetMessage(TweetMessage message) {
 
     }
 }

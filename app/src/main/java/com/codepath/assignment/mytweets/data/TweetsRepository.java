@@ -175,5 +175,10 @@ public class TweetsRepository implements TweetsDataSource {
         });
     }
 
+    @Override
+    public void deleteTweetMessage(TweetMessage tweetMessage) {
+        mTweetsLocalDataSource.deleteTweetMessage(tweetMessage);
+    }
+
 
 }

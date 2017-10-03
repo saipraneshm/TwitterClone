@@ -18,6 +18,7 @@ import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransacti
 import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by saip92 on 9/28/2017.
@@ -193,6 +194,7 @@ public class TweetsLocalDataSource implements TweetsDataSource {
             @Override
             public void execute(DatabaseWrapper databaseWrapper) {
                 TweetMessage tweetMessage = new TweetMessage();
+                tweetMessage.setTweetId(UUID.randomUUID().toString());
                 tweetMessage.setMessage(message);
                 tweetMessage.setUserId(userId);
                 Log.d(TAG,message + " " + userId);
@@ -255,5 +257,10 @@ public class TweetsLocalDataSource implements TweetsDataSource {
 
         Log.d(TAG,"List of messages from db: " + messages);
 
+    }
+
+    @Override
+    public void deleteTweetMessage(TweetMessage tweetMessage) {
+        tweetMessage.delete();
     }
 }

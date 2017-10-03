@@ -43,6 +43,7 @@ public class DialogComposeTweet extends DialogFragment {
     private static final String TAG = DialogComposeTweet.class.getSimpleName();
     public static final String EXTRA_SAVE_AS_DRAFT = "EXTRA_SAVE_AS_DRAFT";
     public static final String EXTRA_TWEET_MESSAGE = "EXTRA_TWEET_MESSAGE";
+    private static final int REQUEST_DRAFT_SCREEN_DIALOG = 252;
     private FragmentComposeTweetBinding mComposeTweetBinding;
     private List<TweetMessage> mTweetMessages = null;
     private String mUserId;
@@ -85,6 +86,21 @@ public class DialogComposeTweet extends DialogFragment {
 
         updateUI();
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode != Activity.RESULT_OK) return;
+
+        if(requestCode == REQUEST_DRAFT_SCREEN_DIALOG && data != null){
+            TweetMessage message = data.getParcelableExtra(DialogDraftScreen.EXTRA_SELECTED_TWEET_MESSAGE);
+            if(message != null){
+                mComposeTweetBinding.etTweetBody.setText(message.getMessage());
+                mTweetsRepository.deleteTweetMessage(message);
+                mTweetMessages.remove(message);
+                showOrHideDraftMenuIcon();
+            }
+        }
     }
 
     private void updateUI() {
@@ -174,6 +190,7 @@ public class DialogComposeTweet extends DialogFragment {
     private void showDraftsDialog() {
         DialogDraftScreen dialogDraftScreen = DialogDraftScreen.newInstance
                 (new ArrayList<>(mTweetMessages));
+        dialogDraftScreen.setTargetFragment(this,REQUEST_DRAFT_SCREEN_DIALOG);
         dialogDraftScreen.show(getFragmentManager(),"DIALOG_DRAFTS_FRAGMENT");
     }
 

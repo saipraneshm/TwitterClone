@@ -50,5 +50,7 @@ public interface TweetsDataSource {
 
     void getTweetMessage(String userId, @NonNull GetTweetMessageCallback callback);
 
+    void deleteTweetMessage(TweetMessage message);
+
 
 }

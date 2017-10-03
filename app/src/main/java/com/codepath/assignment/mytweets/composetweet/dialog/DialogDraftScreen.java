@@ -1,10 +1,14 @@
 package com.codepath.assignment.mytweets.composetweet.dialog;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +17,7 @@ import android.view.WindowManager;
 import com.codepath.assignment.mytweets.R;
 import com.codepath.assignment.mytweets.data.model.TweetMessage;
 import com.codepath.assignment.mytweets.databinding.DialogDraftMessagesBinding;
+import com.codepath.assignment.mytweets.util.ItemClickSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +27,7 @@ import java.util.List;
 public class DialogDraftScreen extends DialogFragment {
 
     private static final String ARGS_MESSAGES = "ARGS_MESSAGES";
+    public static final String EXTRA_SELECTED_TWEET_MESSAGE = "EXTRA_SELECTED_TWEET_MESSAGE";
 
     private DialogDraftMessagesBinding mDraftMessagesBinding;
     private DraftScreenAdapter mAdapter;
@@ -66,12 +72,37 @@ public class DialogDraftScreen extends DialogFragment {
 
     private void updateUI() {
         if(mTweetMessages != null){
+            mDraftMessagesBinding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dismiss();
+                }
+            });
             mDraftMessagesBinding.rvDraftMessages
                     .setLayoutManager(new LinearLayoutManager(getActivity()));
             mDraftMessagesBinding.rvDraftMessages
                     .setAdapter(mAdapter);
+            RecyclerView.ItemDecoration itemDecoration = new
+                    DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
+
+            ItemClickSupport.addTo(mDraftMessagesBinding.rvDraftMessages).setOnItemClickListener
+                    (new ItemClickSupport.OnItemClickListener() {
+                @Override
+                public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                    sendResult(mAdapter.getTweetMessage(position));
+                    dismiss();
+                }
+            });
+            mDraftMessagesBinding.rvDraftMessages.addItemDecoration(itemDecoration);
         }
 
+    }
+
+    private void sendResult(TweetMessage tweetMessage) {
+        if(getTargetFragment() == null) return;
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_SELECTED_TWEET_MESSAGE,tweetMessage);
+        getTargetFragment().onActivityResult(getTargetRequestCode(),Activity.RESULT_OK,intent);
     }
 
     @Nullable
